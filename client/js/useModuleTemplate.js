@@ -3,7 +3,6 @@ import { apiClient } from '@/js/api/manager'
 import { useToast } from 'vue-toastification'
 
 import { moduleTemplateEndpoints } from './endpoints'
-import { logError } from '@/js/utils/logError.js'
 
 const HISTORY_LIMIT = 30
 const AUTO_REFRESH_SECONDS = 10
