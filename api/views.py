@@ -1,5 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.db import connections
 from django.utils import timezone
@@ -30,6 +31,7 @@ def _demo_metrics() -> dict:
 class TemplateItemViewSet(viewsets.ModelViewSet):
     queryset = TemplateItem.objects.all()
     serializer_class = TemplateItemSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = TemplateItem.objects.all()
@@ -40,6 +42,8 @@ class TemplateItemViewSet(viewsets.ModelViewSet):
 
 
 class HealthViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
     @action(detail=False, methods=['get'], url_path='health')
     def health(self, request):
         db_status = 'fail'

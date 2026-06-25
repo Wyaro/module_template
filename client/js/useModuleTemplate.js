@@ -3,6 +3,7 @@ import { apiClient } from '@/js/api/manager'
 import { useToast } from 'vue-toastification'
 
 import { moduleTemplateEndpoints } from './endpoints'
+import { logError } from '@/js/utils/logError.js'
 
 const HISTORY_LIMIT = 30
 const AUTO_REFRESH_SECONDS = 10
@@ -87,7 +88,7 @@ export function useModuleTemplateStatus() {
         } catch (error) {
             statusData.value = { ...statusData.value, status: 'fail', db: 'fail' }
             toast.error('Ошибка подключения к серверу')
-            console.error('Health check error:', error)
+            logError('Health check error:', error)
             lastUpdated.value = new Date().toISOString()
         } finally {
             loading.value = false
