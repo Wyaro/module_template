@@ -85,7 +85,7 @@ ergoms start-client
 
 ### Health‑check и метрики
 
-`GET /api/module_template/health/health/`
+`GET /api/module_template/health/`
 
 Ответ всегда `200 OK`, статус кодируется в теле:
 

@@ -1,6 +1,6 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { apiClient } from '@/js/api/manager'
-import { useToast } from 'vue-toastification'
+import { useToast } from '@/js/utils/toast.js'
 
 import { moduleTemplateEndpoints } from './endpoints'
 
