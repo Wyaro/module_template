@@ -260,7 +260,7 @@
                             <span class="mt-howto-title">Создайте свою учебную страницу</span>
                             <span class="mt-howto-desc">
                                 Добавьте компонент в <code>client/components</code>, маршрут в
-                                <code>client/js/routes.js</code> и пункт меню в <code>menu-config.json</code>.
+                                <code>client/js/routes.js</code> и пункт меню в миграции API.
                             </span>
                         </li>
                     </ul>

@@ -38,7 +38,7 @@
 
 **Цель:** расширить демонстрационный мониторинг своей метрикой (например, `queue_size` или `cpu_load`).
 
-### Шаги на backend
+### Шаги на сервере
 
 1. Откройте `[modules/module_template/api/views.py](modules/module_template/api/views.py)` и функцию `_demo_metrics()`.
 2. Добавьте новую метрику в словарь, например:
@@ -90,7 +90,7 @@
    }
    ```
 
-3. Добавьте пункт меню в `[modules/module_template/client/js/menu-config.json](modules/module_template/client/js/menu-config.json)`, чтобы страница появлялась в навигации.
+3. Добавьте пункт меню через миграцию API (`MenuMigrationHelper`, эталон — `api/migrations/0004_add_menu.py`), чтобы страница появилась в навигации.
 4. При необходимости создайте файл стилей `client/scss/examples-page.scss` и подключите его внутри компонента через:
 
    ```vue

@@ -4,7 +4,7 @@
 
 - health‑check и мониторинг сервиса,
 - простую rule‑based «ML‑модель»,
-- типовой CRUD‑API и Vue‑интерфейс.
+- типовой CRUD‑API и Vue‑клиент.
 
 Модуль задуман как отправная точка для студенческих и исследовательских модулей СКБ.
 
@@ -27,7 +27,6 @@ modules/module_template/
 ├── client/                    # Клиентская часть (Vue)
 │   ├── js/
 │   │   ├── routes.js          # Маршруты Vue Router
-│   │   ├── menu-config.json   # Пункты меню в ядре
 │   │   ├── endpoints.js       # Эндпоинты API модуля
 │   │   ├── useModuleTemplate.js   # Health‑check и метрики
 │   │   └── useModuleTemplateML.js # Работа с ML‑эндпоинтами
@@ -63,13 +62,10 @@ modules/module_template/
 ergoms module_template:migrate
 ```
 
-### Запустить backend и клиент (общие команды проекта)
+### Запустить сервер и клиент (общие команды проекта)
 
 ```bash
-# Django API (dev)
 ergoms dev
-
-# Клиент (Vue dev)
 ergoms start-client
 ```
 
@@ -142,7 +138,7 @@ ergoms start-client
 | `/module-template`         | `ModuleTemplateMain` | Главная страница модуля       |
 | `/module-template/status`  | `ModuleTemplateStatus` | Дашборд статуса и метрик   |
 
-Навигация и пункты меню модуля описаны в `client/js/routes.js` и `client/js/menu-config.json` и автоматически подхватываются ядром.
+Навигация модуля описана в `client/js/routes.js`; пункты бокового меню регистрируются миграцией API (`api/migrations/0004_add_menu.py`).
 
 ---
 
@@ -197,7 +193,7 @@ ergoms start-client
 
 1. Создайте компонент в `client/components/`.
 2. Добавьте маршрут в `client/js/routes.js`.
-3. При необходимости добавьте пункт в меню в `client/js/menu-config.json`.
+3. Добавьте пункт в боковое меню через миграцию API (`MenuMigrationHelper`, см. `api/migrations/0004_add_menu.py`).
 4. Вынесите стили в новый SCSS‑файл в `client/scss/`.
 
 ### Новые API‑эндпоинты

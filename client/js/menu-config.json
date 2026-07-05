@@ -1,9 +1,0 @@
-{
-  "menuSections": [
-    {
-      "icon": "Brain",
-      "routeName": "ModuleTemplateMain",
-      "title": "Module Template"
-    }
-  ]
-}
