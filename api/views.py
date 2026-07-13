@@ -8,6 +8,7 @@ import os
 import random
 import time
 
+from src.config.version import get_system_version
 from .config import MODULE_DATABASE_ALIAS
 from .models import TemplateItem
 from .serializers import TemplateItemSerializer
@@ -58,7 +59,7 @@ class HealthViewSet(viewsets.ViewSet):
             'status': 'ok' if db_status == 'ok' else 'fail',
             'db': db_status,
             'time': timezone.now().isoformat(),
-            'app_version': os.getenv('VERSION', 'dev'),
+            'app_version': get_system_version(),
             **_demo_metrics(),
         }
         return Response(response_data, status=status.HTTP_200_OK)
