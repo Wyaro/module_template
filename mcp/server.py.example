@@ -1,0 +1,53 @@
+"""
+Эталон MCP-сервера модуля. Скопируйте как mcp/server.py и настройте manifest.yaml.
+
+Запуск через Cursor: ergoms mcp-sync → Reload MCP → включить сервер в UI.
+"""
+
+import asyncio
+import json
+import sys
+from pathlib import Path
+from typing import Any
+
+from mcp.server import Server
+from mcp.server.stdio import stdio_server
+from mcp.types import Tool, TextContent
+
+PROJECT_DIR = Path(__file__).resolve().parents[3]
+MODULE_DIR = Path(__file__).resolve().parents[1]
+
+server = Server('ergo-module-module-template')
+
+
+@server.list_tools()
+async def list_tools() -> list[Tool]:
+    return [
+        Tool(
+            name='module_template_ping',
+            description='Проверка доступности MCP модуля module_template',
+            inputSchema={'type': 'object', 'properties': {}},
+        ),
+    ]
+
+
+@server.call_tool()
+async def call_tool(name: str, arguments: Any) -> list[TextContent]:
+    if name == 'module_template_ping':
+        payload = {
+            'module': 'module_template',
+            'project_dir': str(PROJECT_DIR),
+            'module_dir': str(MODULE_DIR),
+            'status': 'ok',
+        }
+        return [TextContent(type='text', text=json.dumps(payload, ensure_ascii=False, indent=2))]
+    raise ValueError(f'Неизвестный инструмент: {name}')
+
+
+async def main():
+    async with stdio_server() as (read_stream, write_stream):
+        await server.run(read_stream, write_stream, server.create_initialization_options())
+
+
+if __name__ == '__main__':
+    asyncio.run(main())

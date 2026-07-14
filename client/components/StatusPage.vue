@@ -316,6 +316,8 @@
             </div>
         </div>
 
+        <TemplateItemsDemo class="mb-4" />
+
         <!-- Integration hint -->
         <div class="mt-integration-hint">
             <Info :size="14" class="flex-shrink-0" />
@@ -357,6 +359,7 @@ import {
 } from 'lucide-vue-next'
 
 import { useModuleTemplateStatus, ALERT_THRESHOLDS, getAlertLevel } from '../js/useModuleTemplate'
+import TemplateItemsDemo from './TemplateItemsDemo.vue'
 
 const HISTORY_LIMIT = 30
 

@@ -9,6 +9,8 @@ import random
 import time
 
 from src.config.version import get_system_version
+from src.core.utils.mixins import SwaggerSafeMixin
+
 from .config import MODULE_DATABASE_ALIAS
 from .models import TemplateItem
 from .serializers import TemplateItemSerializer
@@ -29,16 +31,25 @@ def _demo_metrics() -> dict:
     }
 
 
-class TemplateItemViewSet(viewsets.ModelViewSet):
-    queryset = TemplateItem.objects.all()
+class TemplateItemViewSet(SwaggerSafeMixin, viewsets.ModelViewSet):
     serializer_class = TemplateItemSerializer
     permission_classes = [IsAuthenticated]
+    lookup_field = 'public_id'
+    lookup_url_kwarg = 'public_id'
 
     def get_queryset(self):
-        queryset = TemplateItem.objects.all()
+        queryset = TemplateItem.objects.all().order_by('name')
+        if self.is_swagger_fake_view():
+            return queryset.none()
+        user = self.get_safe_user()
+        if user is None or not user.is_authenticated:
+            return queryset.none()
         active = self.request.query_params.get('active')
         if active is not None:
             queryset = queryset.filter(active=active.lower() == 'true')
+        search = (self.request.query_params.get('search') or '').strip()
+        if search:
+            queryset = queryset.filter(name__icontains=search)
         return queryset
 
 

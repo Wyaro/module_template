@@ -25,7 +25,8 @@ export function useModuleTemplateML() {
       } else {
         toast.warning(response.message || 'Не удалось получить информацию о модели')
       }
-    } catch {
+    } catch (error) {
+      logError(error, { source: 'useModuleTemplateML.fetchMeta' })
       toast.error('Ошибка при получении информации о модели')
     } finally {
       loadingMeta.value = false
@@ -54,7 +55,8 @@ export function useModuleTemplateML() {
       } else {
         toast.warning(response.message || 'Не удалось получить предсказание')
       }
-    } catch {
+    } catch (error) {
+      logError(error, { source: 'useModuleTemplateML.sendPredict' })
       toast.error('Ошибка при обращении к ML-сервису')
     } finally {
       loadingPredict.value = false

@@ -1,0 +1,8 @@
+# Эталон manifest для MCP модуля (не регистрируется — нет server.py).
+# Скопируйте в рабочий модуль, добавьте server.py и выполните: ergoms mcp-sync
+#
+# module: module_template
+# server:
+#   name: ergo-module-module-template
+#   description: "MCP модуля module_template"
+#   script: mcp/server.py
