@@ -7,6 +7,7 @@ export default {
     meta: {
       title: 'Module Template',
       requiresAuth: true,
+      requiresSessionScope: false,
     },
     children: [
       {
@@ -23,6 +24,15 @@ export default {
         component: '@/modules/module_template/client/components/StatusPage.vue',
         meta: {
           title: 'Статус сервиса',
+        },
+      },
+      {
+        path: 'org-example',
+        name: 'ModuleTemplateOrgExample',
+        component: '@/modules/module_template/client/components/StatusPage.vue',
+        meta: {
+          title: 'Пример org-scoped маршрута',
+          requiresSessionScope: true,
         },
       },
     ],

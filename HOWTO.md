@@ -101,7 +101,30 @@
 
 ---
 
-## 4. Полезные команды ergoms для работы с модулем
+## 5. Platform-контракты модуля
+
+**Цель:** подключить только нужные контракты ModuleBridge без import из других модулей.
+
+Полный каталог — [`.cursor/rules/module-contracts.mdc`](../../.cursor/rules/module-contracts.mdc). В `module_template` уже есть stub:
+
+| Контракт | Файл |
+|----------|------|
+| `audit.action_definitions`, `core.user_delete` | [`api/integrations.py`](api/integrations.py) |
+| `layout.plugin_registry` | [`client/js/integrations.js`](client/js/integrations.js) |
+| `routeGuard` (passthrough) | [`client/js/routeGuard.js`](client/js/routeGuard.js) |
+| `requiresSessionScope` на маршруте | [`client/js/routes.js`](client/js/routes.js) → `ModuleTemplateOrgExample` |
+| Sidebar CMS | [`api/migrations/0004_add_menu.py`](api/migrations/0004_add_menu.py) |
+
+Чеклист при новом модуле:
+
+1. Нужен session-scoped UI — `SESSION_SCOPED_MODULE_CONTEXT_GROUP` в `client/js/integrations.js`.
+2. Нужен audit — секция в `api/integrations.py` через `AUDIT_ACTION_DEFINITIONS_GROUP`.
+3. Нужна очистка при удалении user — `@bridge.subscribe_to(CORE_USER_DELETE)`.
+4. Нужен sidebar — миграция меню по образцу `0004_add_menu.py`.
+
+---
+
+## 6. Полезные команды ergoms для работы с модулем
 
 ```bash
 # Применить миграции модуля
