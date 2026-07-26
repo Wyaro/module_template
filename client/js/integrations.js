@@ -1,5 +1,8 @@
 /**
  * ModuleBridge client — учебные stub-контракты module_template.
+ *
+ * Session-scope (gating claim, welcome, module_context) регистрирует
+ * модуль-владелец домена (organizations), не этот шаблон.
  */
 
 import bridge from '@/integrations/ModuleBridge.js'
