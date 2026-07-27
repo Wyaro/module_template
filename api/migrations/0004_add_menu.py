@@ -12,7 +12,7 @@ def add_menu(apps, schema_editor):
     helper = MenuMigrationHelper(apps, 'modules/module_template')
     helper.clear_module_items()
 
-    root = helper.create_group('Шаблон модуля', 'ModuleTemplateMain', icon='Brain')
+    root = helper.create_group('Шаблон модуля', 'ModuleTemplate', icon='Brain')
     helper.create_routes_batch([
         ('Главная', 'ModuleTemplateMain'),
         ('Статус сервиса', 'ModuleTemplateStatus'),
