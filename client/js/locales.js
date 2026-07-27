@@ -16,7 +16,6 @@ export default {
       routes: {
         main: 'Главная',
         status: 'Статус сервиса',
-        orgExample: 'Пример org-scoped маршрута',
         shell: 'Шаблон модуля',
       },
       access: {
@@ -196,7 +195,6 @@ export default {
       routes: {
         main: 'Home',
         status: 'Service status',
-        orgExample: 'Org-scoped route example',
         shell: 'Module template',
       },
       access: {
@@ -376,7 +374,6 @@ export default {
       routes: {
         main: 'Accueil',
         status: 'État du service',
-        orgExample: "Exemple d'itinéraire scoped à l'organisation",
         shell: 'Modèle de module',
       },
       access: {

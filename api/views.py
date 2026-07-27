@@ -11,7 +11,6 @@ import time
 from src.config.version import get_system_version
 from src.core.audit.mixin import AuditedModelMixin
 from src.core.utils.mixins import SwaggerSafeMixin
-from src.core.utils.middleware import RequiresSessionScope
 
 from .config import MODULE_DATABASE_ALIAS
 from .models import TemplateItem
@@ -43,9 +42,7 @@ class TemplateItemViewSet(AuditedModelMixin, SwaggerSafeMixin, viewsets.ModelVie
         'update': 'module_template.templateitem.updated',
         'destroy': 'module_template.templateitem.deleted',
     }
-    # RequiresSessionScope: при registered required_guard claims без scope → 403;
-    # без провайдера session_context.claims проверка всегда проходит.
-    permission_classes = [IsAuthenticated, CanViewModuleTemplate, RequiresSessionScope]
+    permission_classes = [IsAuthenticated, CanViewModuleTemplate]
     lookup_field = 'public_id'
     lookup_url_kwarg = 'public_id'
 

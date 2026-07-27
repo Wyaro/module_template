@@ -56,7 +56,7 @@ modules/module_template/
 Краткое описание ключевых элементов:
 
 - `HealthViewSet` в `api/views.py` — агрегированный статус сервиса, БД и демо‑метрики; доступ — `CanViewModuleTemplate`.
-- `TemplateItemViewSet` — CRUD по `public_id`, `AuditedModelMixin`, `RequiresSessionScope`.
+- `TemplateItemViewSet` — CRUD по `public_id`, `AuditedModelMixin`.
 - `ml_service.py` — rule‑based классификатор текста.
 - `MainPage.vue` / `StatusPage.vue` — UI через `$t('module_template.*')`.
 
@@ -154,7 +154,6 @@ ergoms start-client
 | `/module-template` | `ModuleTemplate` → redirect | Оболочка, редирект на статус |
 | `/module-template` (child `''`) | `ModuleTemplateMain` | Главная страница модуля |
 | `/module-template/status` | `ModuleTemplateStatus` | Дашборд статуса и метрик |
-| `/module-template/org-example` | `ModuleTemplateOrgExample` | Пример `requiresSessionScope` |
 
 Заголовки маршрутов — `meta.titleKey` (`module_template.routes.*`). Навигация — `client/js/routes.js`; пункты бокового меню — миграция `api/migrations/0004_add_menu.py`.
 

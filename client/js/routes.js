@@ -7,7 +7,6 @@ export default {
     meta: {
       titleKey: 'module_template.routes.shell',
       requiresAuth: true,
-      requiresSessionScope: false,
     },
     children: [
       {
@@ -24,15 +23,6 @@ export default {
         component: '@/modules/module_template/client/components/StatusPage.vue',
         meta: {
           titleKey: 'module_template.routes.status',
-        },
-      },
-      {
-        path: 'org-example',
-        name: 'ModuleTemplateOrgExample',
-        component: '@/modules/module_template/client/components/StatusPage.vue',
-        meta: {
-          titleKey: 'module_template.routes.orgExample',
-          requiresSessionScope: true,
         },
       },
     ],
