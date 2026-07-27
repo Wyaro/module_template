@@ -1,6 +1,10 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { apiClient } from '@/js/api/manager'
 import { useToast } from '@/js/utils/toast.js'
+import { logError } from '@/js/utils/logError.js'
+import { formatDateTime } from '@/js/utils/timeUtils.js'
+import { getCurrentBcp47 } from '@/i18n/index.js'
 
 import { moduleTemplateEndpoints } from './endpoints'
 
@@ -24,6 +28,7 @@ const avg = (arr) => arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : 
 
 export function useModuleTemplateStatus() {
     const toast = useToast()
+    const { t } = useI18n()
     const loading = ref(false)
     const statusData = ref({
         status: 'unknown',
@@ -81,13 +86,13 @@ export function useModuleTemplateStatus() {
                 ]
             } else {
                 if (response.data) statusData.value = response.data
-                toast.warning(response.message || 'Сервис недоступен')
+                toast.warning(response.message || t('module_template.status.toast.unavailable'))
                 lastUpdated.value = new Date().toISOString()
             }
         } catch (error) {
             statusData.value = { ...statusData.value, status: 'fail', db: 'fail' }
-            toast.error('Ошибка подключения к серверу')
-            logError('Health check error:', error)
+            toast.error(t('module_template.status.toast.connectionError'))
+            logError('useModuleTemplateStatus.refreshStatus', error)
             lastUpdated.value = new Date().toISOString()
         } finally {
             loading.value = false
@@ -95,34 +100,33 @@ export function useModuleTemplateStatus() {
     }
 
     const formatTime = (isoString) => {
-        if (!isoString) return '-'
-        try {
-            return new Date(isoString).toLocaleString('ru-RU', {
-                day: '2-digit', month: '2-digit', year: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit',
-            })
-        } catch { return isoString }
+        if (!isoString) return '—'
+        return formatDateTime(isoString)
     }
 
     const formatShortTime = (isoString) => {
-        if (!isoString) return '-'
+        if (!isoString) return '—'
         try {
-            return new Date(isoString).toLocaleTimeString('ru-RU', {
-                hour: '2-digit', minute: '2-digit', second: '2-digit',
-            })
-        } catch { return isoString }
+            return new Intl.DateTimeFormat(getCurrentBcp47(), {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            }).format(new Date(isoString))
+        } catch {
+            return isoString
+        }
     }
 
     const formatUptime = (seconds) => {
-        if (seconds == null) return '-'
+        if (seconds == null) return '—'
         const d = Math.floor(seconds / 86400)
         const h = Math.floor((seconds % 86400) / 3600)
         const m = Math.floor((seconds % 3600) / 60)
         const s = seconds % 60
-        if (d > 0) return `${d}д ${h}ч ${m}м`
-        if (h > 0) return `${h}ч ${m}м ${s}с`
-        if (m > 0) return `${m}м ${s}с`
-        return `${s}с`
+        if (d > 0) return t('module_template.status.uptimeDays', { d, h, m })
+        if (h > 0) return t('module_template.status.uptimeHours', { h, m, s })
+        if (m > 0) return t('module_template.status.uptimeMinutes', { m, s })
+        return t('module_template.status.uptimeSeconds', { s })
     }
 
     const setupAutoRefresh = () => {

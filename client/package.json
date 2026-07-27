@@ -1,7 +1,7 @@
 {
-  "name": "@ergo-ms/ml-client",
+  "name": "@ergo-ms/module-template",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "ML модуль - клиентская часть"
+  "description": "Учебный шаблон модуля ERGO MS — клиентская часть"
 }

@@ -1,6 +1,8 @@
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { apiClient } from '@/js/api/manager'
 import { useToast } from '@/js/utils/toast.js'
+import { logError } from '@/js/utils/logError.js'
 
 import { moduleTemplateEndpoints } from './endpoints'
 
@@ -8,6 +10,7 @@ const MAX_INPUT_LENGTH = 2000
 
 export function useModuleTemplateML() {
   const toast = useToast()
+  const { t } = useI18n()
 
   const loadingMeta = ref(false)
   const loadingPredict = ref(false)
@@ -23,11 +26,11 @@ export function useModuleTemplateML() {
       if (response.success) {
         modelMeta.value = response.data
       } else {
-        toast.warning(response.message || 'Не удалось получить информацию о модели')
+        toast.warning(response.message || t('module_template.ml.toast.metaFail'))
       }
     } catch (error) {
-      logError(error, { source: 'useModuleTemplateML.fetchMeta' })
-      toast.error('Ошибка при получении информации о модели')
+      logError('useModuleTemplateML.fetchMeta', error)
+      toast.error(t('module_template.ml.toast.metaError'))
     } finally {
       loadingMeta.value = false
     }
@@ -36,7 +39,7 @@ export function useModuleTemplateML() {
   const sendPredict = async () => {
     const text = inputText.value.trim()
     if (!text) {
-      toast.info('Введите текст для классификации')
+      toast.info(t('module_template.ml.toast.enterText'))
       return
     }
 
@@ -51,13 +54,13 @@ export function useModuleTemplateML() {
 
       if (response.success) {
         prediction.value = response.data
-        toast.success('Классификация выполнена')
+        toast.success(t('module_template.ml.toast.success'))
       } else {
-        toast.warning(response.message || 'Не удалось получить предсказание')
+        toast.warning(response.message || t('module_template.ml.toast.predictFail'))
       }
     } catch (error) {
-      logError(error, { source: 'useModuleTemplateML.sendPredict' })
-      toast.error('Ошибка при обращении к ML-сервису')
+      logError('useModuleTemplateML.sendPredict', error)
+      toast.error(t('module_template.ml.toast.predictError'))
     } finally {
       loadingPredict.value = false
     }

@@ -1,11 +1,11 @@
 export default {
   ModuleTemplate: {
     path: '/module-template',
-    name: 'ModuleTemplateMain',
+    name: 'ModuleTemplate',
     redirect: { name: 'ModuleTemplateStatus' },
     component: '@/modules/module_template/client/ParentLayout.vue',
     meta: {
-      title: 'Module Template',
+      titleKey: 'module_template.routes.shell',
       requiresAuth: true,
       requiresSessionScope: false,
     },
@@ -15,7 +15,7 @@ export default {
         name: 'ModuleTemplateMain',
         component: '@/modules/module_template/client/components/MainPage.vue',
         meta: {
-          title: 'Главная',
+          titleKey: 'module_template.routes.main',
         },
       },
       {
@@ -23,7 +23,7 @@ export default {
         name: 'ModuleTemplateStatus',
         component: '@/modules/module_template/client/components/StatusPage.vue',
         meta: {
-          title: 'Статус сервиса',
+          titleKey: 'module_template.routes.status',
         },
       },
       {
@@ -31,7 +31,7 @@ export default {
         name: 'ModuleTemplateOrgExample',
         component: '@/modules/module_template/client/components/StatusPage.vue',
         meta: {
-          title: 'Пример org-scoped маршрута',
+          titleKey: 'module_template.routes.orgExample',
           requiresSessionScope: true,
         },
       },

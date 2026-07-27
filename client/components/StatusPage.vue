@@ -8,18 +8,18 @@
                     <Activity :size="20" />
                 </div>
                 <div class="mt-header-text">
-                    <h1 class="mt-page-title">Мониторинг шаблонного модуля</h1>
+                    <h1 class="mt-page-title">{{ t('module_template.status.pageTitle') }}</h1>
                     <p class="mt-page-subtitle">
-                        Учебная панель мониторинга для примера health‑check и базовых метрик производительности.
+                        {{ t('module_template.status.pageSubtitle') }}
                     </p>
                     <p class="mt-last-updated">
-                        Последнее обновление:
+                        {{ t('module_template.status.lastUpdated') }}
                         <strong>{{ formatTime(lastUpdated || statusData.time) }}</strong>
                     </p>
                 </div>
             </div>
             <div class="mt-controls">
-                <span class="mt-monitoring-badge">Monitoring demo</span>
+                <span class="mt-monitoring-badge">{{ t('module_template.status.monitoringBadge') }}</span>
                 <div class="mt-controls-row">
                     <div class="form-check form-switch mb-0">
                         <input
@@ -30,7 +30,7 @@
                             @change="setupAutoRefresh"
                         />
                         <label class="form-check-label small" for="mt-auto-refresh">
-                            Авто {{ autoRefreshSeconds }}с
+                            {{ t('module_template.status.autoRefresh', { seconds: autoRefreshSeconds }) }}
                         </label>
                     </div>
                     <button
@@ -39,7 +39,7 @@
                         :disabled="loading"
                     >
                         <RefreshCw :size="14" :class="{ spin: loading }" />
-                        Обновить
+                        {{ t('module_template.status.refresh') }}
                     </button>
                 </div>
             </div>
@@ -54,9 +54,9 @@
                         <XCircle v-else :size="20" />
                     </div>
                     <div class="mt-card-body">
-                        <span class="mt-card-label">Сервис</span>
+                        <span class="mt-card-label">{{ t('module_template.status.service') }}</span>
                         <span class="mt-card-value">
-                            {{ statusData.status === 'ok' ? 'Работает' : 'Ошибка' }}
+                            {{ statusData.status === 'ok' ? t('module_template.status.serviceOk') : t('module_template.status.serviceFail') }}
                         </span>
                     </div>
                     <span class="mt-badge" :class="`mt-badge--${statusData.status === 'ok' ? 'ok' : 'fail'}`">
@@ -71,9 +71,9 @@
                         <Database :size="20" />
                     </div>
                     <div class="mt-card-body">
-                        <span class="mt-card-label">База данных</span>
+                        <span class="mt-card-label">{{ t('module_template.status.database') }}</span>
                         <span class="mt-card-value">
-                            {{ statusData.db === 'ok' ? 'Подключена' : 'Недоступна' }}
+                            {{ statusData.db === 'ok' ? t('module_template.status.dbOk') : t('module_template.status.dbFail') }}
                         </span>
                     </div>
                     <span class="mt-badge" :class="`mt-badge--${statusData.db === 'ok' ? 'ok' : 'fail'}`">
@@ -88,7 +88,7 @@
                         <Clock :size="20" />
                     </div>
                     <div class="mt-card-body">
-                        <span class="mt-card-label">Время работы</span>
+                        <span class="mt-card-label">{{ t('module_template.status.uptime') }}</span>
                         <span class="mt-card-value">{{ formatUptime(statusData.uptime_seconds) }}</span>
                     </div>
                     <span class="mt-badge mt-badge--info">{{ statusData.environment }}</span>
@@ -101,7 +101,7 @@
                         <Server :size="20" />
                     </div>
                     <div class="mt-card-body">
-                        <span class="mt-card-label">Узел / версия</span>
+                        <span class="mt-card-label">{{ t('module_template.status.nodeVersion') }}</span>
                         <span class="mt-card-value">{{ statusData.node_name }}</span>
                     </div>
                     <span class="mt-badge mt-badge--neutral">v{{ statusData.app_version }}</span>
@@ -115,13 +115,13 @@
                 <div class="mt-metric-card" :class="`mt-metric-card--${latencyLevel}`">
                     <div class="mt-metric-header">
                         <Activity :size="16" />
-                        <span>Задержка ответа</span>
+                        <span>{{ t('module_template.status.latency') }}</span>
                         <span class="mt-badge ms-auto" :class="`mt-badge--${latencyLevel}`">
                             {{ latencyLevel.toUpperCase() }}
                         </span>
                     </div>
                     <div class="mt-metric-value">
-                        {{ statusData.latency_ms != null ? `${statusData.latency_ms} мс` : '—' }}
+                        {{ statusData.latency_ms != null ? t('module_template.status.ms', { value: statusData.latency_ms }) : '—' }}
                     </div>
                     <div class="mt-metric-bar">
                         <div
@@ -131,11 +131,11 @@
                         ></div>
                     </div>
                     <div class="mt-metric-aggregates" v-if="metricAggregates.latencyAvg != null">
-                        <span>ср {{ metricAggregates.latencyAvg }} мс</span>
-                        <span>мин {{ metricAggregates.latencyMin }} мс</span>
-                        <span>макс {{ metricAggregates.latencyMax }} мс</span>
+                        <span>{{ t('module_template.status.latencyAvg', { value: metricAggregates.latencyAvg }) }}</span>
+                        <span>{{ t('module_template.status.latencyMin', { value: metricAggregates.latencyMin }) }}</span>
+                        <span>{{ t('module_template.status.latencyMax', { value: metricAggregates.latencyMax }) }}</span>
                     </div>
-                    <p class="mt-metric-hint">Уровни для примера: warn &gt; 80 мс, crit &gt; 150 мс</p>
+                    <p class="mt-metric-hint">{{ t('module_template.status.latencyHint') }}</p>
                 </div>
             </div>
 
@@ -143,7 +143,7 @@
                 <div class="mt-metric-card" :class="`mt-metric-card--${rpsLevel}`">
                     <div class="mt-metric-header">
                         <Zap :size="16" />
-                        <span>Запросов в минуту</span>
+                        <span>{{ t('module_template.status.rps') }}</span>
                         <span class="mt-badge ms-auto" :class="`mt-badge--${rpsLevel}`">
                             {{ rpsLevel.toUpperCase() }}
                         </span>
@@ -159,9 +159,9 @@
                         ></div>
                     </div>
                     <div class="mt-metric-aggregates" v-if="metricAggregates.rpsAvg != null">
-                        <span>ср {{ metricAggregates.rpsAvg }} RPS</span>
+                        <span>{{ t('module_template.status.rpsAvg', { value: metricAggregates.rpsAvg }) }}</span>
                     </div>
-                    <p class="mt-metric-hint">Учебные пороги нагрузки: warn &gt; 50, crit &gt; 80 RPS</p>
+                    <p class="mt-metric-hint">{{ t('module_template.status.rpsHint') }}</p>
                 </div>
             </div>
 
@@ -169,7 +169,7 @@
                 <div class="mt-metric-card" :class="`mt-metric-card--${errorRateLevel}`">
                     <div class="mt-metric-header">
                         <AlertTriangle :size="16" />
-                        <span>Процент ошибок</span>
+                        <span>{{ t('module_template.status.errorRate') }}</span>
                         <span class="mt-badge ms-auto" :class="`mt-badge--${errorRateLevel}`">
                             {{ errorRateLevel.toUpperCase() }}
                         </span>
@@ -185,9 +185,9 @@
                         ></div>
                     </div>
                     <div class="mt-metric-aggregates" v-if="metricAggregates.errorRateAvg != null">
-                        <span>ср {{ metricAggregates.errorRateAvg }}%</span>
+                        <span>{{ t('module_template.status.errorRateAvg', { value: metricAggregates.errorRateAvg }) }}</span>
                     </div>
-                    <p class="mt-metric-hint">Учебные пороги отказов: warn &gt; 2%, crit &gt; 5%</p>
+                    <p class="mt-metric-hint">{{ t('module_template.status.errorRateHint') }}</p>
                 </div>
             </div>
         </div>
@@ -199,11 +199,11 @@
                     <div class="card-body">
                         <h6 class="mt-chart-title">
                             <TrendingUp :size="15" />
-                            Задержка ответа — история
-                            <span class="text-muted fw-normal ms-1 small">(демо)</span>
+                            {{ t('module_template.status.chartLatencyTitle') }}
+                            <span class="text-muted fw-normal ms-1 small">{{ t('module_template.status.demo') }}</span>
                         </h6>
                         <p class="mt-chart-subtitle">
-                            Временная динамика задержки последнего запроса к health‑check (чем ниже кривая, тем лучше).
+                            {{ t('module_template.status.chartLatencySubtitle') }}
                         </p>
 
                         <div v-if="latencyChart.path" class="mt-line-chart">
@@ -239,7 +239,7 @@
                             </div>
                         </div>
                         <div v-else class="mt-chart-empty">
-                            Данные появятся после нескольких обновлений health‑check.
+                            {{ t('module_template.status.chartEmpty') }}
                         </div>
                     </div>
                 </div>
@@ -250,11 +250,11 @@
                     <div class="card-body">
                         <h6 class="mt-chart-title">
                             <BarChart2 :size="15" />
-                            Запросы в минуту
-                            <span class="text-muted fw-normal ms-1 small">(демо)</span>
+                            {{ t('module_template.status.chartRpsTitle') }}
+                            <span class="text-muted fw-normal ms-1 small">{{ t('module_template.status.demo') }}</span>
                         </h6>
                         <p class="mt-chart-subtitle">
-                            Оценка интенсивности нагрузки по числу запросов в минуту за последние измерения.
+                            {{ t('module_template.status.chartRpsSubtitle') }}
                         </p>
 
                         <div v-if="rpsBars.length" class="mt-bar-chart">
@@ -268,7 +268,7 @@
                             ></div>
                         </div>
                         <div v-else class="mt-chart-empty">
-                            Данные появятся после нескольких обновлений health‑check.
+                            {{ t('module_template.status.chartEmpty') }}
                         </div>
                     </div>
                 </div>
@@ -280,13 +280,13 @@
             <div class="card-header bg-transparent border-0 pt-3 pb-2 d-flex align-items-center justify-content-between">
                 <h6 class="mb-0 d-flex align-items-center gap-2">
                     <List :size="16" />
-                    Журнал измерений
+                    {{ t('module_template.status.historyTitle') }}
                 </h6>
-                <span class="text-muted small">{{ history.length }} из {{ HISTORY_LIMIT }}</span>
+                <span class="text-muted small">{{ t('module_template.status.historyCount', { count: history.length, limit: HISTORY_LIMIT }) }}</span>
             </div>
             <div class="card-body pt-1">
                 <div v-if="!history.length" class="text-muted small py-2">
-                    Журнал появится после первого обновления health‑check.
+                    {{ t('module_template.status.historyEmpty') }}
                 </div>
                 <div v-else class="mt-history-log">
                     <div
@@ -305,7 +305,7 @@
                             {{ item.status === 'ok' ? 'OK' : 'FAIL' }}
                         </span>
                         <span class="mt-log-metrics">
-                            {{ item.latency_ms != null ? `${item.latency_ms} мс` : '—' }}
+                            {{ item.latency_ms != null ? t('module_template.status.ms', { value: item.latency_ms }) : '—' }}
                             &bull;
                             {{ item.requests_per_minute != null ? `${item.requests_per_minute} RPS` : '—' }}
                             &bull;
@@ -323,45 +323,37 @@
             <Info :size="14" class="flex-shrink-0" />
             <div>
                 <p class="mb-1">
-                    Все метрики на этой странице — демонстрационные заглушки. Для подключения реальных данных:
+                    {{ t('module_template.status.integrationTitle') }}
                 </p>
                 <ul class="mt-1 mb-0 ps-3 small">
-                    <li>
-                        Замените логику в <code>_demo_metrics()</code> в <code>api/views.py</code> на запросы
-                        к вашей системе мониторинга (Prometheus, внутренний API и т.п.).
-                    </li>
-                    <li>
-                        Добавьте новые поля в объект, который возвращает метод <code>health</code>, и сохраните их в
-                        <code>useModuleTemplateStatus</code> (история <code>history</code>).
-                    </li>
-                    <li>
-                        Отобразите метрики на <code>StatusPage.vue</code> в виде карточек, графиков или в журнале
-                        измерений. Подробный пример см. в <code>HOWTO.md</code>.
-                    </li>
+                    <li>{{ t('module_template.status.integrationStep1') }}</li>
+                    <li>{{ t('module_template.status.integrationStep2') }}</li>
+                    <li>{{ t('module_template.status.integrationStep3') }}</li>
                 </ul>
             </div>
         </div>
 
-        <div v-if="loading" class="mt-loading-overlay">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Загрузка...</span>
-            </div>
+        <div v-if="loading" class="mt-loading-overlay" aria-live="polite">
+            <SpinnerLoading :loading-text="t('module_template.loading')" color="primary" />
         </div>
     </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import {
     Activity, RefreshCw, CheckCircle, XCircle, Database,
     Clock, Server, Zap, AlertTriangle, TrendingUp,
     BarChart2, List, Info,
 } from 'lucide-vue-next'
 
+import SpinnerLoading from '@/components/SpinnerLoading.vue'
 import { useModuleTemplateStatus, ALERT_THRESHOLDS, getAlertLevel } from '../js/useModuleTemplate'
 import TemplateItemsDemo from './TemplateItemsDemo.vue'
 
 const HISTORY_LIMIT = 30
+const { t } = useI18n()
 
 const {
     loading, statusData, lastUpdated, history,

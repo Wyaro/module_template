@@ -17,7 +17,7 @@
    def predict(payload: Dict) -> Dict: ...
    ```
 
-   и возвращаемую структуру (ключи `category`, `priority`, `score`, `matched_keywords`, `text_length`, `sentence_count`), чтобы фронт не пришлось менять.
+   и возвращаемую структуру (ключи `category`, `priority`, `score`, `matched_keywords`, `text_length`, `sentence_count`), чтобы клиент не пришлось менять.
 
 3. Вместо вызова `_classify(text[:2000])`:
 
@@ -30,7 +30,7 @@
    - `model_name`, `model_version`, `model_type`,
    - по желанию добавьте дополнительные поля (например, размер датасета, используемую архитектуру).
 
-Фронтенд (`MainPage.vue` + `useModuleTemplateML.js`) автоматически подхватит новые значения без изменений, если структура ответа сохранена.
+Клиент (`MainPage.vue` + `useModuleTemplateML.js`) автоматически подхватит новые значения без изменений, если структура ответа сохранена.
 
 ---
 
@@ -68,36 +68,53 @@
    - создайте ещё одну metric‑карточку или включите метрику в существующие;
    - определите уровни `ok/warn/crit` через `ALERT_THRESHOLDS` и `getAlertLevel`.
 
-3. Обновите подсказки в `status-page.scss` и/или текстовые подписи, чтобы студенту было понятно, что именно показывает новая метрика.
+3. Добавьте подписи в `client/js/locales.js` (ru и en) и обновите стили в `status-page.scss` при необходимости.
 
 ---
 
 ## 3. Добавить новую страницу / карточку на клиенте
 
-**Цель:** показать студентам типичный путь от маршрута до компонента и меню.
+**Цель:** показать типичный путь от маршрута до компонента и меню.
 
 ### Шаги
 
-1. Создайте Vue‑компонент, например `client/components/ExamplesPage.vue`.
-2. Добавьте маршрут в `[modules/module_template/client/js/routes.js](modules/module_template/client/js/routes.js)`:
+1. Создайте Vue‑компонент, например `client/components/ExamplesPage.vue`. Строки UI — через `useI18n()` и ключи `module_template.*`.
+2. Добавьте ключи заголовка в `[modules/module_template/client/js/locales.js](modules/module_template/client/js/locales.js)`.
+3. Добавьте дочерний маршрут в `[modules/module_template/client/js/routes.js](modules/module_template/client/js/routes.js)`:
 
    ```javascript
    {
-     path: '/module-template/examples',
+     path: 'examples',
      name: 'ModuleTemplateExamples',
-     component: () => import('../components/ExamplesPage.vue'),
-     meta: { title: 'Примеры', requiresAuth: true },
+     component: '@/modules/module_template/client/components/ExamplesPage.vue',
+     meta: {
+       titleKey: 'module_template.routes.examples',
+     },
    }
    ```
 
-3. Добавьте пункт меню через миграцию API (`MenuMigrationHelper`, эталон — `api/migrations/0004_add_menu.py`), чтобы страница появилась в навигации.
-4. При необходимости создайте файл стилей `client/scss/examples-page.scss` и подключите его внутри компонента через:
+   Component — **строка пути** для lazy‑load через RouteManager ядра (не sync `import` и не `() => import(...)` с относительным путём в устаревшем стиле).
+
+4. Добавьте пункт меню через миграцию API (`MenuMigrationHelper`, эталон — `api/migrations/0004_add_menu.py`).
+5. При необходимости создайте файл стилей `client/scss/examples-page.scss` и подключите его внутри компонента:
 
    ```vue
    <style lang="scss" scoped>
    @import '../scss/examples-page.scss';
    </style>
    ```
+
+---
+
+## 4. Права и аудит (эталон)
+
+**Цель:** сервер проверяет права сам; клиентский `permission-rules.js` — только UX.
+
+1. Ключ права — в `api/permissions.py` (`TEMPLATE_VIEW` / `CanViewModuleTemplate`).
+2. Каталог для ADP — `api/permission_catalog.py`.
+3. ViewSet / ViewSet actions — `permission_classes = [IsAuthenticated, CanViewModuleTemplate, ...]`.
+4. CRUD с журналом — `AuditedModelMixin` + действия в `api/integrations.py` (`AUDIT_ACTION_DEFINITIONS_GROUP`).
+5. Клиент — `client/js/permission-rules.js` с теми же ключами в `permissions`.
 
 ---
 
@@ -142,4 +159,3 @@ ergoms start-client
 ```bash
 ergoms help
 ```
-

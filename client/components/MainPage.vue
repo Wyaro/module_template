@@ -5,11 +5,15 @@
             <!-- ───── Шапка ───── -->
             <div class="card-header">
                 <div class="header-left">
-                    <img :src="sdbLogo" alt="СКБ" class="module-logo" />
+                    <ContentImage
+                        :src="sdbLogo"
+                        :alt="t('module_template.logoAlt')"
+                        class="module-logo"
+                    />
                     <div class="header-text">
-                        <h1 class="module-title">Шаблон модуля</h1>
+                        <h1 class="module-title">{{ t('module_template.title') }}</h1>
                         <p class="module-subtitle">
-                            Учебный шаблон для разработки модулей в системе&nbsp;ERGO&nbsp;MS&nbsp;·&nbsp;СКБ
+                            {{ t('module_template.subtitle') }}
                         </p>
                     </div>
                 </div>
@@ -31,11 +35,10 @@
                 <div class="welcome-section">
                     <h2 class="section-heading">
                         <GraduationCap :size="22" class="section-icon" />
-                        О шаблонном модуле
+                        {{ t('module_template.aboutHeading') }}
                     </h2>
                     <p class="welcome-description">
-                        Модуль демонстрирует архитектурные соглашения ERGO MS: структуру API, работу с базой данных,
-                        подключение очередей задач и интеграцию ML-сервисов. Используйте его как отправную точку для собственных модулей.
+                        {{ t('module_template.aboutText') }}
                     </p>
                 </div>
 
@@ -62,7 +65,7 @@
                         class="btn btn-primary d-inline-flex align-items-center gap-2"
                     >
                         <Activity :size="16" />
-                        Мониторинг сервиса
+                        {{ t('module_template.monitorService') }}
                     </router-link>
                 </div>
 
@@ -72,15 +75,13 @@
                         <div class="ml-header-text">
                             <h2 class="section-heading mb-1">
                                 <BrainCircuit :size="22" class="section-icon" />
-                                Классификация текста
+                                {{ t('module_template.ml.heading') }}
                             </h2>
                             <p class="welcome-description mb-0">
-                                Rule-based ML-модель для разбора входящих обращений. Определяет категорию, приоритет и
-                                ключевые признаки текста. Замените логику в&nbsp;<code>api/ml_service.py</code> на
-                                настоящую модель, сохранив контракт&nbsp;API.
+                                {{ t('module_template.ml.description') }}
                             </p>
                         </div>
-                        <span class="ml-badge">Rule-based ML</span>
+                        <span class="ml-badge">{{ t('module_template.ml.badge') }}</span>
                     </div>
 
                     <div class="row g-4 align-items-stretch">
@@ -90,23 +91,23 @@
                             <div class="ml-card h-100">
                                 <div class="ml-card-label">
                                     <FileText :size="14" />
-                                    Входные данные
+                                    {{ t('module_template.ml.inputLabel') }}
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label form-label-sm">Текст обращения</label>
+                                    <label class="form-label form-label-sm">{{ t('module_template.ml.textLabel') }}</label>
                                     <textarea
                                         v-model="inputText"
                                         class="form-control form-control-sm"
                                         rows="5"
-                                        placeholder="Введите текст или выберите пример ниже..."
+                                        :placeholder="t('module_template.ml.textPlaceholder')"
                                         maxlength="2000"
                                     ></textarea>
                                     <div class="char-counter">{{ inputText.length }}&thinsp;/&thinsp;2000</div>
                                 </div>
 
                                 <div class="ml-examples mb-3">
-                                    <span class="ml-examples-label">Примеры:</span>
+                                    <span class="ml-examples-label">{{ t('module_template.ml.examples') }}</span>
                                     <button
                                         v-for="ex in examples"
                                         :key="ex.id"
@@ -124,7 +125,7 @@
                                     :disabled="loadingPredict || !inputText.trim()"
                                 >
                                     <Activity :size="15" :class="{ spin: loadingPredict }" />
-                                    <span>{{ loadingPredict ? 'Классификация...' : 'Классифицировать' }}</span>
+                                    <span>{{ loadingPredict ? t('module_template.ml.classifying') : t('module_template.ml.classify') }}</span>
                                 </button>
                             </div>
                         </div>
@@ -134,32 +135,32 @@
                             <div class="ml-card h-100">
                                 <div class="ml-card-label">
                                     <BarChart2 :size="14" />
-                                    Результат классификации
+                                    {{ t('module_template.ml.resultHeading') }}
                                 </div>
 
                                 <!-- Метаданные модели -->
                                 <div class="model-meta-row mb-3" v-if="modelMeta">
                                     <span class="model-meta-item">
-                                        <span class="model-meta-key">Модель:</span>
+                                        <span class="model-meta-key">{{ t('module_template.ml.model') }}:</span>
                                         <span class="model-meta-val">{{ modelMeta.model_name }}</span>
                                     </span>
                                     <span class="model-meta-item">
-                                        <span class="model-meta-key">Тип:</span>
+                                        <span class="model-meta-key">{{ t('module_template.ml.type') }}:</span>
                                         <span class="model-meta-val">{{ modelMeta.model_type }}</span>
                                     </span>
                                     <span class="model-meta-item">
-                                        <span class="model-meta-key">Версия:</span>
+                                        <span class="model-meta-key">{{ t('module_template.ml.version') }}:</span>
                                         <span class="model-meta-val">{{ modelMeta.model_version }}</span>
                                     </span>
                                 </div>
                                 <div class="model-meta-row mb-3 text-muted small" v-else-if="loadingMeta">
-                                    Загрузка метаданных модели...
+                                    {{ t('module_template.ml.loadingMeta') }}
                                 </div>
 
                                 <!-- Пустое состояние -->
                                 <div class="ml-empty" v-if="!prediction && !loadingPredict">
                                     <BrainCircuit :size="32" class="ml-empty-icon" />
-                                    <p>Результат появится после классификации</p>
+                                    <p>{{ t('module_template.ml.emptyResult') }}</p>
                                 </div>
 
                                 <!-- Скелетон загрузки -->
@@ -173,19 +174,19 @@
                                 <template v-else-if="prediction">
                                     <div class="result-grid">
                                         <div class="result-item">
-                                            <span class="result-key">Категория</span>
+                                            <span class="result-key">{{ t('module_template.ml.category') }}</span>
                                             <span :class="['result-val', 'result-badge', `badge-cat--${prediction.category}`]">
                                                 {{ categoryLabel(prediction.category) }}
                                             </span>
                                         </div>
                                         <div class="result-item">
-                                            <span class="result-key">Приоритет</span>
+                                            <span class="result-key">{{ t('module_template.ml.priority') }}</span>
                                             <span :class="['result-val', 'result-badge', `badge-pri--${prediction.priority}`]">
                                                 {{ priorityLabel(prediction.priority) }}
                                             </span>
                                         </div>
                                         <div class="result-item">
-                                            <span class="result-key">Балл важности</span>
+                                            <span class="result-key">{{ t('module_template.ml.score') }}</span>
                                             <div class="result-score-wrap">
                                                 <span class="result-score-num">{{ prediction.score }}</span>
                                                 <div class="score-bar-track">
@@ -197,13 +198,13 @@
                                             </div>
                                         </div>
                                         <div class="result-item">
-                                            <span class="result-key">Символов / предложений</span>
+                                            <span class="result-key">{{ t('module_template.ml.charsSentences') }}</span>
                                             <span class="result-val">
                                                 {{ prediction.text_length }}&thinsp;/&thinsp;{{ prediction.sentence_count }}
                                             </span>
                                         </div>
                                         <div class="result-item result-item--full" v-if="prediction.matched_keywords?.length">
-                                            <span class="result-key">Сработавшие ключи</span>
+                                            <span class="result-key">{{ t('module_template.ml.matchedKeys') }}</span>
                                             <div class="result-keywords">
                                                 <span
                                                     v-for="kw in prediction.matched_keywords"
@@ -213,14 +214,14 @@
                                             </div>
                                         </div>
                                         <div class="result-item result-item--full" v-if="prediction.note">
-                                            <span class="result-key">Примечание</span>
+                                            <span class="result-key">{{ t('module_template.ml.note') }}</span>
                                             <span class="result-val text-muted">{{ prediction.note }}</span>
                                         </div>
                                     </div>
 
                                     <!-- Сырой JSON -->
                                     <details class="raw-json-details">
-                                        <summary>Сырой ответ API</summary>
+                                        <summary>{{ t('module_template.ml.rawResponse') }}</summary>
                                         <pre class="raw-json">{{ JSON.stringify(prediction, null, 2) }}</pre>
                                     </details>
                                 </template>
@@ -239,29 +240,20 @@
                 <div class="mt-howto mt-4">
                     <h3 class="section-heading mb-2">
                         <Lightbulb :size="18" class="section-icon" />
-                        Как развивать этот модуль дальше
+                        {{ t('module_template.howto.heading') }}
                     </h3>
                     <ul class="mt-howto-list">
                         <li class="mt-howto-item">
-                            <span class="mt-howto-title">Подключите свою ML‑модель</span>
-                            <span class="mt-howto-desc">
-                                Замените rule‑based логику в <code>api/ml_service.py</code> на вызов обученной модели,
-                                сохранив структуру ответа. Подробнее см. <code>HOWTO.md</code>.
-                            </span>
+                            <span class="mt-howto-title">{{ t('module_template.howto.mlTitle') }}</span>
+                            <span class="mt-howto-desc">{{ t('module_template.howto.mlDesc') }}</span>
                         </li>
                         <li class="mt-howto-item">
-                            <span class="mt-howto-title">Добавьте реальные метрики мониторинга</span>
-                            <span class="mt-howto-desc">
-                                Расширьте <code>_demo_metrics()</code> в <code>api/views.py</code> и выведите новые поля
-                                на <code>StatusPage.vue</code> через <code>useModuleTemplateStatus</code>.
-                            </span>
+                            <span class="mt-howto-title">{{ t('module_template.howto.metricsTitle') }}</span>
+                            <span class="mt-howto-desc">{{ t('module_template.howto.metricsDesc') }}</span>
                         </li>
                         <li class="mt-howto-item">
-                            <span class="mt-howto-title">Создайте свою учебную страницу</span>
-                            <span class="mt-howto-desc">
-                                Добавьте компонент в <code>client/components</code>, маршрут в
-                                <code>client/js/routes.js</code> и пункт меню в миграции API.
-                            </span>
+                            <span class="mt-howto-title">{{ t('module_template.howto.pageTitle') }}</span>
+                            <span class="mt-howto-desc">{{ t('module_template.howto.pageDesc') }}</span>
                         </li>
                     </ul>
                 </div>
@@ -272,14 +264,19 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import {
     Activity, Database, Layers, Code,
     BookOpen, GitBranch, GraduationCap,
     BrainCircuit, FileText, BarChart2, Lightbulb,
 } from 'lucide-vue-next'
 
+import ContentImage from '@/components/ContentImage.vue'
 import sdbLogo from '../assets/svg/sdb.svg'
 import { useModuleTemplateML } from '../js/useModuleTemplateML'
+
+const { t } = useI18n()
 
 const {
     loadingMeta,
@@ -290,90 +287,88 @@ const {
     sendPredict,
 } = useModuleTemplateML()
 
-// ─── Фичи ───────────────────────────────────────────────────────────────────
-const features = [
+const features = computed(() => [
     {
         id: 'monitoring',
         icon: Activity,
         color: 'monitoring',
-        title: 'Мониторинг доступности',
-        tag: 'Health',
-        desc: 'Health-check сервиса и подключения к БД с готовой страницей статуса.',
+        title: t('module_template.features.monitoring.title'),
+        tag: t('module_template.features.monitoring.tag'),
+        desc: t('module_template.features.monitoring.desc'),
     },
     {
         id: 'data',
         icon: Database,
         color: 'db',
-        title: 'Работа с данными',
-        tag: 'Data',
-        desc: 'Пример модели, миграций и роутера БД для студенческих проектов.',
+        title: t('module_template.features.data.title'),
+        tag: t('module_template.features.data.tag'),
+        desc: t('module_template.features.data.desc'),
     },
     {
         id: 'api',
         icon: Layers,
         color: 'api',
-        title: 'REST API (DRF)',
-        tag: 'API',
-        desc: 'ViewSet-ы, сериализаторы и документация Swagger — образец академического API.',
+        title: t('module_template.features.api.title'),
+        tag: t('module_template.features.api.tag'),
+        desc: t('module_template.features.api.desc'),
     },
     {
         id: 'frontend',
         icon: Code,
         color: 'frontend',
-        title: 'Vue-компоненты',
-        tag: 'UI',
-        desc: 'Composables, маршрутизация и SCSS-модули — шаблон фронтенд-модуля.',
+        title: t('module_template.features.frontend.title'),
+        tag: t('module_template.features.frontend.tag'),
+        desc: t('module_template.features.frontend.desc'),
     },
-]
+])
 
-// ─── Примеры текстов ─────────────────────────────────────────────────────────
-const examples = [
+const examples = computed(() => [
     {
         id: 'error',
-        label: 'Ошибка',
+        label: t('module_template.ml.exampleError'),
         text: 'Критическая ошибка в production: сервис упал, логи показывают exception при запросе к БД. Срочно!',
     },
     {
         id: 'request',
-        label: 'Запрос',
+        label: t('module_template.ml.exampleRequest'),
         text: 'Подскажите, пожалуйста, как получить доступ к аналитическому дашборду для нашего отдела.',
     },
     {
         id: 'report',
-        label: 'Отчёт',
+        label: t('module_template.ml.exampleReport'),
         text: 'Отчёт по продажам за 2025 год: динамика роста выручки составила 18% относительно прошлого периода.',
     },
     {
         id: 'task',
-        label: 'Задача',
+        label: t('module_template.ml.exampleTask'),
         text: 'Нужно разработать и добавить новый модуль экспорта данных в форматах CSV и XLSX.',
     },
-]
+])
 
 const applyExample = (text) => {
     inputText.value = text
 }
 
-// ─── Вспомогательные функции ─────────────────────────────────────────────────
-const CATEGORY_LABELS = {
-    error: 'Ошибка',
-    urgent: 'Срочно',
-    request: 'Запрос',
-    report: 'Отчёт',
-    task: 'Задача',
-    other: 'Другое',
+const categoryLabel = (cat) => {
+    const key = `module_template.ml.categories.${cat}`
+    const label = t(key)
+    return label === key ? cat : label
 }
 
-const PRIORITY_LABELS = {
-    high: 'Высокий',
-    medium: 'Средний',
-    low: 'Низкий',
+const priorityLabel = (pri) => {
+    const key = `module_template.ml.priorities.${pri}`
+    const label = t(key)
+    return label === key ? pri : label
 }
-
-const categoryLabel = (cat) => CATEGORY_LABELS[cat] ?? cat
-const priorityLabel = (pri) => PRIORITY_LABELS[pri] ?? pri
 </script>
 
 <style lang="scss" scoped>
 @import '../scss/main-page.scss';
+
+/* ContentImage: class попадает на img, размеры — на flex-обёртку */
+.header-left :deep(.ergo-content-image) {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
 </style>

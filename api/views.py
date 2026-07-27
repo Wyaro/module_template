@@ -9,11 +9,13 @@ import random
 import time
 
 from src.config.version import get_system_version
+from src.core.audit.mixin import AuditedModelMixin
 from src.core.utils.mixins import SwaggerSafeMixin
 from src.core.utils.middleware import RequiresSessionScope
 
 from .config import MODULE_DATABASE_ALIAS
 from .models import TemplateItem
+from .permissions import CanViewModuleTemplate
 from .serializers import TemplateItemSerializer
 from .ml_service import get_model_meta, predict
 
@@ -32,11 +34,18 @@ def _demo_metrics() -> dict:
     }
 
 
-class TemplateItemViewSet(SwaggerSafeMixin, viewsets.ModelViewSet):
+class TemplateItemViewSet(AuditedModelMixin, SwaggerSafeMixin, viewsets.ModelViewSet):
     serializer_class = TemplateItemSerializer
+    audit_module = 'module_template'
+    audit_entity_type = 'templateitem'
+    audit_action_map = {
+        'create': 'module_template.templateitem.created',
+        'update': 'module_template.templateitem.updated',
+        'destroy': 'module_template.templateitem.deleted',
+    }
     # RequiresSessionScope: при registered required_guard claims без scope → 403;
     # без провайдера session_context.claims проверка всегда проходит.
-    permission_classes = [IsAuthenticated, RequiresSessionScope]
+    permission_classes = [IsAuthenticated, CanViewModuleTemplate, RequiresSessionScope]
     lookup_field = 'public_id'
     lookup_url_kwarg = 'public_id'
 
@@ -57,7 +66,7 @@ class TemplateItemViewSet(SwaggerSafeMixin, viewsets.ModelViewSet):
 
 
 class HealthViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CanViewModuleTemplate]
 
     @action(detail=False, methods=['get'], url_path='health')
     def health(self, request):

@@ -26,8 +26,33 @@ bridge.provide_many(
     key='module_template',
     obj={
         'module': 'module_template',
-        'label': 'Module Template',
-        'actions': [],
+        'module_label': 'Шаблон модуля',
+        'actions': [
+            {
+                'action': 'module_template.templateitem.created',
+                'label': 'Элемент шаблона создан',
+                'icon': 'Plus',
+                'category': 'templateitem',
+                'category_label': 'Элементы шаблона',
+                'severity': 'info',
+            },
+            {
+                'action': 'module_template.templateitem.updated',
+                'label': 'Элемент шаблона изменён',
+                'icon': 'Pencil',
+                'category': 'templateitem',
+                'category_label': 'Элементы шаблона',
+                'severity': 'info',
+            },
+            {
+                'action': 'module_template.templateitem.deleted',
+                'label': 'Элемент шаблона удалён',
+                'icon': 'Trash2',
+                'category': 'templateitem',
+                'category_label': 'Элементы шаблона',
+                'severity': 'info',
+            },
+        ],
     },
 )
 
