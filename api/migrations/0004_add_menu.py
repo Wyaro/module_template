@@ -30,6 +30,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('module_template', '0003_templateitem'),
+        ('cms_adp', '0007_populate_core_menu'),
     ]
 
     operations = [

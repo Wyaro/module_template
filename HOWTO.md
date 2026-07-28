@@ -116,6 +116,11 @@
 4. CRUD с журналом — `AuditedModelMixin` + действия в `api/integrations.py` (`AUDIT_ACTION_DEFINITIONS_GROUP`).
 5. Клиент — `client/js/permission-rules.js` с теми же ключами в `permissions`.
 
+**Важно при копировании шаблона в боевой модуль:** в эталоне одно право
+`module_template_view` закрывает весь CRUD и demo-actions — это учебное упрощение.
+В проде разделите права (`*_view` / `*_create` / `*_update` / `*_delete`) и
+назначайте их на соответствующие action'ы ViewSet.
+
 ---
 
 ## 5. Platform-контракты модуля
