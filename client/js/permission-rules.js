@@ -1,5 +1,6 @@
 /**
  * Правила проверки прав для module_template (UX).
+ * titleKey / messageKey — ключи i18n; сервер всё равно проверяет сам.
  */
 export default [
   {
@@ -8,7 +9,7 @@ export default [
       to.path?.startsWith('/module-template'),
     module: 'module_template',
     permissions: ['module_template_view'],
-    title: 'Доступ к шаблону модуля ограничен',
-    message: 'У вас нет прав для просмотра учебного модуля. Обратитесь к администратору.',
+    titleKey: 'module_template.access.title',
+    messageKey: 'module_template.access.message',
   },
 ]

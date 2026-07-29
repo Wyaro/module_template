@@ -1,165 +1,91 @@
 # HOWTO: учебные сценарии для module_template
 
-Этот файл собирает короткие практические сценарии по развитию модуля. Он дополняет `README.md` и отсылает к конкретным файлам в API и клиенте.
+Этот файл дополняет `README.md` короткими практическими сценариями.
 
 ---
 
-## 1. Заменить rule‑based модель на свою ML‑модель
+## 1. Заменить rule-based модель на свою ML-модель
 
-**Цель:** использовать свой классификатор текста (sklearn / PyTorch / внешний сервис), сохранив существующий API‑контракт.
+1. Откройте [`api/ml_service.py`](api/ml_service.py).
+2. Сохраните сигнатуру `predict(payload) -> dict` и ключи ответа.
+3. Замените `_classify(...)` на вызов своей модели.
+4. Обновите `get_model_meta()`.
 
-### Шаги
-
-1. Откройте `[modules/module_template/api/ml_service.py](modules/module_template/api/ml_service.py)`.
-2. Оставьте сигнатуру функции:
-
-   ```python
-   def predict(payload: Dict) -> Dict: ...
-   ```
-
-   и возвращаемую структуру (ключи `category`, `priority`, `score`, `matched_keywords`, `text_length`, `sentence_count`), чтобы клиент не пришлось менять.
-
-3. Вместо вызова `_classify(text[:2000])`:
-
-   - загрузите свою модель (например, в модуле‑одиночке или через lazy‑инициализацию),
-   - подготовьте признаки (vectorizer, tokenizer и т.п.),
-   - получите предсказание и переведите его в те же поля (`category`, `priority`, `score`).
-
-4. В `get_model_meta()` обновите:
-
-   - `model_name`, `model_version`, `model_type`,
-   - по желанию добавьте дополнительные поля (например, размер датасета, используемую архитектуру).
-
-Клиент (`MainPage.vue` + `useModuleTemplateML.js`) автоматически подхватит новые значения без изменений, если структура ответа сохранена.
+Клиент (`MainPage.vue` + `useModuleTemplateML.js`) подхватит ответ при той же структуре.
 
 ---
 
-## 2. Добавить новую метрику в health‑check и вывести её на StatusPage
+## 2. Добавить метрику в health-check и StatusPage
 
-**Цель:** расширить демонстрационный мониторинг своей метрикой (например, `queue_size` или `cpu_load`).
+1. В [`api/views.py`](api/views.py) расширьте `_demo_metrics()`.
+2. В [`client/js/useModuleTemplate.js`](client/js/useModuleTemplate.js) — поля в `statusData` / `history`.
+3. На [`StatusPage.vue`](client/components/StatusPage.vue) — карточка/график; уровни через `ALERT_THRESHOLDS`.
+4. Подписи — в `locales.js` (ru / en / fr).
 
-### Шаги на сервере
-
-1. Откройте `[modules/module_template/api/views.py](modules/module_template/api/views.py)` и функцию `_demo_metrics()`.
-2. Добавьте новую метрику в словарь, например:
-
-   ```python
-   def _demo_metrics() -> dict:
-       return {
-           "latency_ms": ...,
-           "requests_per_minute": ...,
-           "error_rate": ...,
-           "queue_size": random.randint(0, 50),
-           ...
-       }
-   ```
-
-3. Убедитесь, что ключ входит в `response_data`, возвращаемый методом `health`.
-
-### Шаги на клиенте
-
-1. В composable `[modules/module_template/client/js/useModuleTemplate.js](modules/module_template/client/js/useModuleTemplate.js)`:
-
-   - добавьте поле в `statusData` и объекты, которые пишутся в `history`;
-   - при необходимости добавьте агрегаты (средние значения) в `metricAggregates`.
-
-2. В компоненте `[modules/module_template/client/components/StatusPage.vue](modules/module_template/client/components/StatusPage.vue)`:
-
-   - создайте ещё одну metric‑карточку или включите метрику в существующие;
-   - определите уровни `ok/warn/crit` через `ALERT_THRESHOLDS` и `getAlertLevel`.
-
-3. Добавьте подписи в `client/js/locales.js` (ru и en) и обновите стили в `status-page.scss` при необходимости.
+Перезагружаемый контент — в `LoadingContentArea`; toolbar снаружи.
 
 ---
 
-## 3. Добавить новую страницу / карточку на клиенте
+## 3. Добавить новую страницу на клиенте
 
-**Цель:** показать типичный путь от маршрута до компонента и меню.
+1. Компонент в `client/components/`, строки через `t('module_template.*')`.
+2. Ключи в `locales.js` (все три языка).
+3. Дочерний маршрут в `routes.js` — **строка** `@/modules/module_template/...`, `meta.titleKey`.
+4. Пункт меню — миграция API (`MenuMigrationHelper`).
 
-### Шаги
+Для списков с фильтрами опирайтесь на блок [`TemplateItemsDemo.vue`](client/components/TemplateItemsDemo.vue) на StatusPage:
 
-1. Создайте Vue‑компонент, например `client/components/ExamplesPage.vue`. Строки UI — через `useI18n()` и ключи `module_template.*`.
-2. Добавьте ключи заголовка в `[modules/module_template/client/js/locales.js](modules/module_template/client/js/locales.js)`.
-3. Добавьте дочерний маршрут в `[modules/module_template/client/js/routes.js](modules/module_template/client/js/routes.js)`:
-
-   ```javascript
-   {
-     path: 'examples',
-     name: 'ModuleTemplateExamples',
-     component: '@/modules/module_template/client/components/ExamplesPage.vue',
-     meta: {
-       titleKey: 'module_template.routes.examples',
-     },
-   }
-   ```
-
-   Component — **строка пути** для lazy‑load через RouteManager ядра (не sync `import` и не `() => import(...)` с относительным путём в устаревшем стиле).
-
-4. Добавьте пункт меню через миграцию API (`MenuMigrationHelper`, эталон — `api/migrations/0004_add_menu.py`).
-5. При необходимости создайте файл стилей `client/scss/examples-page.scss` и подключите его внутри компонента:
-
-   ```vue
-   <style lang="scss" scoped>
-   @import '../scss/examples-page.scss';
-   </style>
-   ```
+- `SearchInput` + `SelectBox` + `DataTable` внутри `LoadingContentArea`;
+- create/edit — `ModalCenter` (`defineAsyncComponent` + `v-if`);
+- delete — `confirmDelete`;
+- ключи API — `public_id`.
 
 ---
 
-## 4. Права и аудит (эталон)
+## 4. Права и аудит
 
-**Цель:** сервер проверяет права сам; клиентский `permission-rules.js` — только UX.
+1. Ключ права — `api/permissions.py` / `permission_catalog.py`.
+2. ViewSet — `permission_classes = [IsAuthenticated, CanViewModuleTemplate, ...]`.
+3. CRUD с журналом — `AuditedModelMixin` + `AUDIT_ACTION_DEFINITIONS_GROUP`.
+4. UX-guard — `permission-rules.js` с `titleKey` / `messageKey`.
 
-1. Ключ права — в `api/permissions.py` (`TEMPLATE_VIEW` / `CanViewModuleTemplate`).
-2. Каталог для ADP — `api/permission_catalog.py`.
-3. ViewSet / ViewSet actions — `permission_classes = [IsAuthenticated, CanViewModuleTemplate, ...]`.
-4. CRUD с журналом — `AuditedModelMixin` + действия в `api/integrations.py` (`AUDIT_ACTION_DEFINITIONS_GROUP`).
-5. Клиент — `client/js/permission-rules.js` с теми же ключами в `permissions`.
-
-**Важно при копировании шаблона в боевой модуль:** в эталоне одно право
-`module_template_view` закрывает весь CRUD и demo-actions — это учебное упрощение.
-В проде разделите права (`*_view` / `*_create` / `*_update` / `*_delete`) и
-назначайте их на соответствующие action'ы ViewSet.
+В шаблоне одно право `module_template_view` закрывает весь CRUD — в боевом модуле разделите права.
 
 ---
 
-## 5. Platform-контракты модуля
+## 5. Platform-контракты ModuleBridge
 
-**Цель:** подключить только нужные контракты ModuleBridge без import из других модулей.
-
-Полный каталог — [`.cursor/rules/module-contracts.mdc`](../../.cursor/rules/module-contracts.mdc). В `module_template` уже есть stub:
+Полный каталог — [`.cursor/rules/module-contracts.mdc`](../../.cursor/rules/module-contracts.mdc).
 
 | Контракт | Файл |
 |----------|------|
 | `audit.action_definitions`, `core.user_delete` | [`api/integrations.py`](api/integrations.py) |
 | `layout.plugin_registry` | [`client/js/integrations.js`](client/js/integrations.js) |
+| stub session-scope (закомментирован) | те же integrations |
 | `routeGuard` (passthrough) | [`client/js/routeGuard.js`](client/js/routeGuard.js) |
-| Sidebar CMS | [`api/migrations/0004_add_menu.py`](api/migrations/0004_add_menu.py) |
+| Sidebar | миграции меню |
 
-Чеклист при новом модуле:
+Session-scoped UI регистрирует владелец scope `<host_module>` (`SESSION_CLAIMS_GROUP` и клиентские группы). Эталон guard: `modules/<host_module>/client/js/*Guard.js`.
 
-1. Нужен session-scoped UI (организация и т.п.) — `meta.requiresSessionScope` + при необходимости `SESSION_SCOPED_MODULE_CONTEXT_GROUP` / `RequiresSessionScope` на API.
-2. Нужен audit — секция в `api/integrations.py` через `AUDIT_ACTION_DEFINITIONS_GROUP`.
-3. Нужна очистка при удалении user — `@bridge.subscribe_to(CORE_USER_DELETE)`.
-4. Нужен sidebar — миграция меню по образцу `0004_add_menu.py`.
+Межмодульные группы **не** кладите в каталог ядра. Platform-константы импортируйте из каталога ядра.
 
 ---
 
-## 6. Полезные команды ergoms для работы с модулем
+## 6. Celery
+
+Эталон: [`api/tasks.py`](api/tasks.py), [`api/celery_config.py`](api/celery_config.py).
 
 ```bash
-# Применить миграции модуля
-ergoms module_template:migrate
-
-# Запустить API (dev)
-ergoms dev
-
-# Запустить клиент (Vue dev)
-ergoms start-client
+ergoms start-worker
 ```
 
-Для полного списка команд по проекту используйте:
+---
+
+## 7. Команды
 
 ```bash
+ergoms module_template:migrate
+ergoms dev
+ergoms start-client
 ergoms help
 ```

@@ -29,7 +29,11 @@ const avg = (arr) => arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : 
 export function useModuleTemplateStatus() {
     const toast = useToast()
     const { t } = useI18n()
+    /** Первая загрузка — полный спиннер LoadingContentArea */
     const loading = ref(false)
+    /** Повторное обновление (кнопка / авто) — без сброса layout */
+    const refreshing = ref(false)
+    const hasLoadedOnce = ref(false)
     const statusData = ref({
         status: 'unknown',
         db: 'unknown',
@@ -48,10 +52,12 @@ export function useModuleTemplateStatus() {
     const autoRefreshEnabled = ref(true)
     const autoRefreshSeconds = ref(AUTO_REFRESH_SECONDS)
     let intervalId = null
+    let refreshInFlight = false
 
     const latencyLevel  = computed(() => getAlertLevel(statusData.value.latency_ms, ALERT_THRESHOLDS.latency))
     const rpsLevel      = computed(() => getAlertLevel(statusData.value.requests_per_minute, ALERT_THRESHOLDS.rps))
     const errorRateLevel = computed(() => getAlertLevel(statusData.value.error_rate, ALERT_THRESHOLDS.error))
+    const isBusy = computed(() => loading.value || refreshing.value)
 
     const metricAggregates = computed(() => {
         const latencies = history.value.map(h => h.latency_ms).filter(v => v != null)
@@ -67,7 +73,15 @@ export function useModuleTemplateStatus() {
     })
 
     const refreshStatus = async () => {
-        loading.value = true
+        if (refreshInFlight) {
+            return
+        }
+        refreshInFlight = true
+        if (hasLoadedOnce.value) {
+            refreshing.value = true
+        } else {
+            loading.value = true
+        }
         try {
             const response = await apiClient.get(moduleTemplateEndpoints.moduleTemplate.health)
             if (response.success) {
@@ -84,18 +98,23 @@ export function useModuleTemplateStatus() {
                     },
                     ...history.value.slice(0, HISTORY_LIMIT - 1),
                 ]
+                hasLoadedOnce.value = true
             } else {
                 if (response.data) statusData.value = response.data
                 toast.warning(response.message || t('module_template.status.toast.unavailable'))
                 lastUpdated.value = new Date().toISOString()
+                hasLoadedOnce.value = true
             }
         } catch (error) {
             statusData.value = { ...statusData.value, status: 'fail', db: 'fail' }
             toast.error(t('module_template.status.toast.connectionError'))
             logError('useModuleTemplateStatus.refreshStatus', error)
             lastUpdated.value = new Date().toISOString()
+            hasLoadedOnce.value = true
         } finally {
             loading.value = false
+            refreshing.value = false
+            refreshInFlight = false
         }
     }
 
@@ -136,7 +155,7 @@ export function useModuleTemplateStatus() {
         }
         if (!autoRefreshEnabled.value) return
         intervalId = setInterval(() => {
-            if (!loading.value) refreshStatus()
+            if (!refreshInFlight) refreshStatus()
         }, autoRefreshSeconds.value * 1000)
     }
 
@@ -151,6 +170,8 @@ export function useModuleTemplateStatus() {
 
     return {
         loading,
+        refreshing,
+        isBusy,
         statusData,
         lastUpdated,
         history,

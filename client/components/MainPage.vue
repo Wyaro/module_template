@@ -326,22 +326,22 @@ const examples = computed(() => [
     {
         id: 'error',
         label: t('module_template.ml.exampleError'),
-        text: 'Критическая ошибка в production: сервис упал, логи показывают exception при запросе к БД. Срочно!',
+        text: t('module_template.ml.exampleErrorText'),
     },
     {
         id: 'request',
         label: t('module_template.ml.exampleRequest'),
-        text: 'Подскажите, пожалуйста, как получить доступ к аналитическому дашборду для нашего отдела.',
+        text: t('module_template.ml.exampleRequestText'),
     },
     {
         id: 'report',
         label: t('module_template.ml.exampleReport'),
-        text: 'Отчёт по продажам за 2025 год: динамика роста выручки составила 18% относительно прошлого периода.',
+        text: t('module_template.ml.exampleReportText'),
     },
     {
         id: 'task',
         label: t('module_template.ml.exampleTask'),
-        text: 'Нужно разработать и добавить новый модуль экспорта данных в форматах CSV и XLSX.',
+        text: t('module_template.ml.exampleTaskText'),
     },
 ])
 

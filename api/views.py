@@ -1,5 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.db import connections
@@ -21,6 +22,12 @@ from .ml_service import get_model_meta, predict
 _service_start = time.monotonic()
 
 
+class TemplateItemPagination(PageNumberPagination):
+    page_size = 12
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
 def _demo_metrics() -> dict:
     """Generate demo/stub metrics for the template module health-check."""
     return {
@@ -35,6 +42,7 @@ def _demo_metrics() -> dict:
 
 class TemplateItemViewSet(AuditedModelMixin, SwaggerSafeMixin, viewsets.ModelViewSet):
     serializer_class = TemplateItemSerializer
+    pagination_class = TemplateItemPagination
     audit_module = 'module_template'
     audit_entity_type = 'templateitem'
     audit_action_map = {

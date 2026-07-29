@@ -5,7 +5,7 @@
  * в routers.js через runSessionScopeGuard. Здесь — только доменная логика
  * (например validateSession API владельца scope).
  *
- * Эталон владельца scope: modules/organizations/client/js/organizationGuard.js
+ * Эталон владельца scope: modules/<host_module>/client/js/*Guard.js
  */
 
 export async function routeGuard(_to, _from, next) {

@@ -4,6 +4,15 @@
 .mt-status-page {
   padding: 24px;
   position: relative;
+  width: 100%;
+}
+
+.mt-status-content {
+  transition: opacity 0.2s ease;
+
+  &--refreshing {
+    opacity: 0.72;
+  }
 }
 
 .mt-header {
@@ -50,7 +59,7 @@
   margin: 0;
   font-size: 0.82rem;
   color: var(--bs-secondary-color);
-  max-width: 520px;
+  max-width: none;
 }
 
 .mt-last-updated {
@@ -429,20 +438,6 @@
     font-size: 0.6875rem;
     color: var(--bs-body-color);
   }
-}
-
-// ----------------------------------------
-// Loading overlay
-// ----------------------------------------
-.mt-loading-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255, 255, 255, .75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(2px);
 }
 
 // ----------------------------------------

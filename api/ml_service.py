@@ -13,6 +13,8 @@ Rule-based text classification model — учебный пример для СК
 from typing import Dict, List, Tuple
 import re
 
+from django.utils.translation import gettext as _
+
 # ---------------------------------------------------------------------------
 # Словарь правил: (категория, ключевые слова, базовый приоритет)
 # ---------------------------------------------------------------------------
@@ -100,7 +102,7 @@ def predict(payload: Dict) -> Dict:
             'matched_keywords': [],
             'text_length': 0,
             'sentence_count': 0,
-            'note': 'Текст не передан — классификация невозможна.',
+            'note': _('Текст не передан — классификация невозможна.'),
         }
     return _classify(text[:2000])  # защита от очень длинных текстов
 
@@ -110,14 +112,14 @@ def get_model_meta() -> Dict:
         'model_name': 'RuleBasedClassifier',
         'model_version': '1.0.0',
         'model_type': 'rule-based',
-        'description': (
+        'description': _(
             'Учебная модель классификации текстов на основе словарных правил. '
             'Демонстрирует контракт predict/meta API для модулей СКБ.'
         ),
         'categories': ['error', 'urgent', 'request', 'report', 'task', 'other'],
         'priority_levels': ['low', 'medium', 'high'],
         'max_input_length': 2000,
-        'replace_hint': (
+        'replace_hint': _(
             'Для подключения реальной ML-модели замените функцию predict() '
             'в api/ml_service.py на вызов своего обученного классификатора.'
         ),

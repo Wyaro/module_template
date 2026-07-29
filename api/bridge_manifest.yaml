@@ -1,0 +1,7 @@
+# Владелец ops/groups для ModuleBridge HTTP-маршрутизации (MODULE_RUNTIME=microservice).
+service: module_template
+ops:
+  - module_template.health_status
+  - module_template.ping
+groups:
+  - audit.action_definitions

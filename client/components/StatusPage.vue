@@ -36,15 +36,25 @@
                     <button
                         class="btn btn-sm btn-primary d-flex align-items-center gap-1"
                         @click="refreshStatus"
-                        :disabled="loading"
+                        :disabled="isBusy"
+                        :aria-busy="isBusy"
                     >
-                        <RefreshCw :size="14" :class="{ spin: loading }" />
+                        <RefreshCw :size="14" :class="{ spin: isBusy }" />
                         {{ t('module_template.status.refresh') }}
                     </button>
                 </div>
             </div>
         </div>
 
+        <div
+            class="mt-status-content"
+            :class="{ 'mt-status-content--refreshing': refreshing }"
+        >
+        <LoadingContentArea
+            :loading="loading"
+            min-height="16rem"
+            :loading-text="t('module_template.loading')"
+        >
         <!-- Status cards -->
         <div class="row g-3 mb-4">
             <div class="col-sm-6 col-xl-3">
@@ -60,7 +70,7 @@
                         </span>
                     </div>
                     <span class="mt-badge" :class="`mt-badge--${statusData.status === 'ok' ? 'ok' : 'fail'}`">
-                        {{ statusData.status === 'ok' ? 'OK' : 'FAIL' }}
+                        {{ statusData.status === 'ok' ? badgeOk : badgeFail }}
                     </span>
                 </div>
             </div>
@@ -77,7 +87,7 @@
                         </span>
                     </div>
                     <span class="mt-badge" :class="`mt-badge--${statusData.db === 'ok' ? 'ok' : 'fail'}`">
-                        {{ statusData.db === 'ok' ? 'OK' : 'FAIL' }}
+                        {{ statusData.db === 'ok' ? badgeOk : badgeFail }}
                     </span>
                 </div>
             </div>
@@ -117,7 +127,7 @@
                         <Activity :size="16" />
                         <span>{{ t('module_template.status.latency') }}</span>
                         <span class="mt-badge ms-auto" :class="`mt-badge--${latencyLevel}`">
-                            {{ latencyLevel.toUpperCase() }}
+                            {{ levelLabel(latencyLevel) }}
                         </span>
                     </div>
                     <div class="mt-metric-value">
@@ -145,7 +155,7 @@
                         <Zap :size="16" />
                         <span>{{ t('module_template.status.rps') }}</span>
                         <span class="mt-badge ms-auto" :class="`mt-badge--${rpsLevel}`">
-                            {{ rpsLevel.toUpperCase() }}
+                            {{ levelLabel(rpsLevel) }}
                         </span>
                     </div>
                     <div class="mt-metric-value">
@@ -171,7 +181,7 @@
                         <AlertTriangle :size="16" />
                         <span>{{ t('module_template.status.errorRate') }}</span>
                         <span class="mt-badge ms-auto" :class="`mt-badge--${errorRateLevel}`">
-                            {{ errorRateLevel.toUpperCase() }}
+                            {{ levelLabel(errorRateLevel) }}
                         </span>
                     </div>
                     <div class="mt-metric-value">
@@ -291,7 +301,7 @@
                 <div v-else class="mt-history-log">
                     <div
                         v-for="(item, i) in history"
-                        :key="i"
+                        :key="`${item.time}-${i}`"
                         class="mt-log-row"
                         :class="{
                             'mt-log-row--ok':   item.status === 'ok' && item.db === 'ok',
@@ -302,7 +312,7 @@
                         <div class="mt-log-dot"></div>
                         <span class="mt-log-time">{{ formatShortTime(item.time) }}</span>
                         <span class="mt-badge" :class="`mt-badge--${item.status === 'ok' ? 'ok' : 'fail'}`">
-                            {{ item.status === 'ok' ? 'OK' : 'FAIL' }}
+                            {{ item.status === 'ok' ? badgeOk : badgeFail }}
                         </span>
                         <span class="mt-log-metrics">
                             {{ item.latency_ms != null ? t('module_template.status.ms', { value: item.latency_ms }) : '—' }}
@@ -316,7 +326,10 @@
             </div>
         </div>
 
-        <TemplateItemsDemo class="mb-4" />
+        </LoadingContentArea>
+        </div>
+
+        <TemplateItemsDemo />
 
         <!-- Integration hint -->
         <div class="mt-integration-hint">
@@ -332,10 +345,6 @@
                 </ul>
             </div>
         </div>
-
-        <div v-if="loading" class="mt-loading-overlay" aria-live="polite">
-            <SpinnerLoading :loading-text="t('module_template.loading')" color="primary" />
-        </div>
     </div>
 </template>
 
@@ -348,7 +357,7 @@ import {
     BarChart2, List, Info,
 } from 'lucide-vue-next'
 
-import SpinnerLoading from '@/components/SpinnerLoading.vue'
+import LoadingContentArea from '@/components/LoadingContentArea.vue'
 import { useModuleTemplateStatus, ALERT_THRESHOLDS, getAlertLevel } from '../js/useModuleTemplate'
 import TemplateItemsDemo from './TemplateItemsDemo.vue'
 
@@ -356,13 +365,18 @@ const HISTORY_LIMIT = 30
 const { t } = useI18n()
 
 const {
-    loading, statusData, lastUpdated, history,
+    loading, refreshing, isBusy, statusData, lastUpdated, history,
     autoRefreshEnabled, autoRefreshSeconds,
     latencyLevel, rpsLevel, errorRateLevel,
     metricAggregates, refreshStatus,
     formatTime, formatShortTime, formatUptime,
     setupAutoRefresh,
 } = useModuleTemplateStatus()
+
+const badgeOk = computed(() => t('module_template.status.badgeOk'))
+const badgeFail = computed(() => t('module_template.status.badgeFail'))
+
+const levelLabel = (level) => t(`module_template.status.levels.${level}`)
 
 const latencyChart = computed(() => {
     const pts = [...history.value].reverse()
