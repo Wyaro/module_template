@@ -1,11 +1,10 @@
+# Source of truth (ru). Translations: locales/<lang>/ergoms.help.yaml
 module: module_template
-title: "Шаблон модуля"
-summary: "Учебный модуль-шаблон для новых модулей ERGO MS"
-
+title: Шаблон модуля
+summary: Учебный модуль-шаблон для новых модулей ERGO MS
 commands:
   migrate:
-    summary: "Создать и применить миграции module_template"
-
+    summary: Создать и применить миграции module_template
 notes:
-  - "Вызов: ergoms module_template:migrate"
-  - "При добавлении ergoms.conf в модуль создайте или обновите ergoms.help.yaml (см. .cursor/rules/ergoms-module-help.mdc)"
+- 'Вызов: ergoms module_template:migrate'
+- При добавлении ergoms.conf в модуль создайте или обновите ergoms.help.yaml (см. .cursor/rules/ergoms-module-help.mdc)

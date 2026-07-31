@@ -1,0 +1,10 @@
+# en overlay for ergoms.help.yaml (merged over Russian source)
+module: module_template
+title: Module template
+summary: Tutorial template module for new ERGO MS modules
+commands:
+  migrate:
+    summary: Create and apply module_template migrations
+notes:
+- 'Invoke: ergoms module_template:migrate'
+- When adding ergoms.conf to a module, create or update ergoms.help.yaml (see .cursor/rules/ergoms-module-help.mdc)

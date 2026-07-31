@@ -1,0 +1,10 @@
+# fr overlay for ergoms.help.yaml (merged over Russian source)
+module: module_template
+title: Modèle de module
+summary: Module modèle pédagogique pour les nouveaux modules ERGO MS
+commands:
+  migrate:
+    summary: Créer et appliquer les migrations module_template
+notes:
+- 'Appel : ergoms module_template:migrate'
+- Lors de l'ajout d'ergoms.conf à un module, créez ou mettez à jour ergoms.help.yaml (voir .cursor/rules/ergoms-module-help.mdc)
