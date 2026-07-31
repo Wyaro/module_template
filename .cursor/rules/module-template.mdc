@@ -1,0 +1,40 @@
+---
+description: module_template — учебный модуль, CRUD TemplateItem, ML-демо, компоненты ядра
+globs:
+  - "modules/module_template/**"
+alwaysApply: false
+---
+
+# module_template
+
+Учебный эталон модуля ERGO MS. При работе в этом каталоге опирайся на код модуля, не выдумывай параллельную структуру.
+
+## Кратко
+
+- API: `api/` (`apps.py`, ViewSet + permissions, `public_id` в URL)
+- Клиент: `client/js/` (`routes.js`, `endpoints.js`, `locales.js`, `permission-rules.js`)
+- Мост: `api/integrations.py`, `client/js/integrations.js`
+- Список/CRUD UI: `SelectBox`, `SearchInput`, `DataTable`, `ModalCenter`, `LoadingContentArea` из ядра
+- Команды: `ergoms module_template:…`, не `manage.py` напрямую
+
+## Обязательно
+
+- Внешние идентификаторы — `public_id` (UUID), не pk БД в URL и storage
+- Выпадающие списки — только `SelectBox` из ядра
+- Права на API — `permission_classes`; UX-guard — `permission-rules.js`
+- i18n клиента — ключи в `client/js/locales.js` (ru / en / fr)
+
+## Запрещено
+
+- Прямой import домена этого модуля из `core/`
+- Свой `<select>` / самодельная пагинация bootstrap вместо компонентов ядра
+- Секреты и токены в коде модуля
+
+## Эталоны
+
+| Тема | Файл |
+|------|------|
+| CRUD + UI | `client/components/TemplateItemsDemo.vue` |
+| ML-демо | `api/ml_service.py`, `client/js/useModuleTemplateML.js` |
+| Мост / audit | `api/integrations.py` |
+| Сценарии | `HOWTO.md` |

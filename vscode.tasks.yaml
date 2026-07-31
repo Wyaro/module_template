@@ -1,0 +1,7 @@
+# Задачи VS Code / Cursor (тип ergo-module).
+# Discovery: расширение ergo-ms-tasks → Run Task.
+module: module_template
+tasks:
+  - label: "Template: Migrate"
+    detail: "Создать и применить миграции модуля-шаблона"
+    command: "ergoms module_template:migrate"

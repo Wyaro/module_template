@@ -1,5 +1,5 @@
 # Эталон manifest для MCP модуля (не регистрируется — нет server.py).
-# Скопируйте в рабочий модуль, добавьте server.py и выполните: ergoms mcp-sync
+# Скопируйте в рабочий модуль, добавьте server.py — подхватит расширение Module Cursor MCP.
 #
 # module: module_template
 # server:

@@ -81,7 +81,18 @@ ergoms start-worker
 
 ---
 
-## 7. Команды
+## 7. Правила Cursor модуля
+
+Доменные инструкции агента:
+
+- `.cursor/rules/*.mdc` — с `globs: modules/module_template/**`
+- `AGENTS.md` — короткий fallback без расширения
+
+После добавления или правки `.mdc`: расширение **ERGO MS Module Cursor Rules** синхронизирует staging само (или команда **ERGO MS: Sync Module Cursor Rules**). Установка: `ergoms install-extensions`.
+
+---
+
+## 8. Команды
 
 ```bash
 ergoms module_template:migrate

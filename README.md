@@ -50,11 +50,16 @@ modules/module_template/
 │   ├── scss/
 │   └── assets/
 ├── mcp/                       # эталон manifest (без server.py — не регистрируется)
+├── .cursor/rules/             # правила Cursor модуля (*.mdc)
+├── AGENTS.md                  # fallback для агента без расширения
 ├── ergoms.conf
 ├── ergoms.help.yaml
+├── vscode.tasks.yaml          # задачи Run Task (ergo-module)
 ├── HOWTO.md
 └── README.md
 ```
+
+Правила агента Cursor для этого модуля — в `.cursor/rules/` и кратко в `AGENTS.md`. Подхват `.mdc` в Cursor: расширение **ERGO MS Module Cursor Rules** (`ergoms install-extensions`).
 
 ---
 
@@ -106,7 +111,7 @@ ergoms start-client
 
 `--ui-*` / `--bs-*`. `theme-defaults.js` не нужен, пока хватает палитры сайта.
 
-По необходимости: `clientEnv.js`, `process_roles.yaml` / `host_lifecycle.yaml`, `theme-defaults.js`.
+По необходимости: `clientEnv.js`, `process_roles.yaml` / `host_lifecycle.yaml`, `vscode.tasks.yaml`, `theme-defaults.js`.
 
 ---
 
@@ -117,7 +122,8 @@ ergoms start-client
 3. Permission keys, audit prefixes, bridge op names.
 4. Route names, locales namespace.
 5. `ergoms.conf` / MCP name.
-6. Меню — миграция `MenuMigrationHelper(apps, 'modules/<name>')`.
+6. `vscode.tasks.yaml` — label/command под новый модуль (если нужны задачи в Run Task).
+7. Меню — миграция `MenuMigrationHelper(apps, 'modules/<name>')`.
 
 ---
 
