@@ -35,7 +35,7 @@ def remove_items_menu(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ('module_template', '0006_menu_shell_route'),
-        ('cms_adp', '0007_populate_core_menu'),
+        ('cms_adp', '0001_initial_squashed_0042_drop_graduate_employment_tables'),
     ]
 
     operations = [

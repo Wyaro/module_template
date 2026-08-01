@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('module_template', '0003_templateitem'),
-        ('cms_adp', '0007_populate_core_menu'),
+        ('cms_adp', '0001_initial_squashed_0042_drop_graduate_employment_tables'),
     ]
 
     operations = [
