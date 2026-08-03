@@ -23,12 +23,18 @@ alwaysApply: false
 - Выпадающие списки — только `SelectBox` из ядра
 - Права на API — `permission_classes`; UX-guard — `permission-rules.js`
 - i18n клиента — ключи в `client/js/locales.js` (ru / en / fr)
+- List-фильтры CRUD — `useRouteQueryState` (`page` / `q` / `active` в URL), эталон `TemplateItemsDemo.vue`
+- Стили — `var(--ui-*)` (не прямой `--bs-*`, пока хватает палитры сайта)
 
 ## Запрещено
 
 - Прямой import домена этого модуля из `core/`
 - Свой `<select>` / самодельная пагинация bootstrap вместо компонентов ядра
 - Секреты и токены в коде модуля
+
+## Локализация
+
+`client/js/locales.js` сейчас ~650 строк (лимит файла — 700). При росте UI разнеси каталоги на `client/js/locales/{ru,en,fr}.js` и оставь тонкий facade в `locales.js`.
 
 ## Эталоны
 

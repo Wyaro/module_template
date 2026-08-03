@@ -1,7 +1,8 @@
 """
 Эталон MCP-сервера модуля. Скопируйте как mcp/server.py и настройте manifest.yaml.
 
-Запуск через Cursor: ergoms mcp-sync → Reload MCP → включить сервер в UI.
+Подхват в Cursor: ergoms install-extensions → Reload Window →
+команда «ERGO MS: Sync Module Cursor MCP» → включить сервер в Settings → Tools & MCP.
 """
 
 import asyncio

@@ -225,22 +225,22 @@
                             >
                                 <defs>
                                     <linearGradient id="mt-latency-grad" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%"   style="stop-color: var(--bs-primary); stop-opacity: 0.2" />
-                                        <stop offset="100%" style="stop-color: var(--bs-primary); stop-opacity: 0" />
+                                        <stop offset="0%"   style="stop-color: var(--ui-accent); stop-opacity: 0.2" />
+                                        <stop offset="100%" style="stop-color: var(--ui-accent); stop-opacity: 0" />
                                     </linearGradient>
                                 </defs>
                                 <path :d="latencyChart.area" fill="url(#mt-latency-grad)" />
                                 <path
                                     :d="latencyChart.path"
                                     fill="none"
-                                    :style="{ stroke: 'var(--bs-primary)', strokeWidth: '1.5', strokeLinejoin: 'round' }"
+                                    :style="{ stroke: 'var(--ui-accent)', strokeWidth: '1.5', strokeLinejoin: 'round' }"
                                 />
                                 <circle
                                     v-if="latencyChart.dots.length"
                                     :cx="latencyChart.dots[latencyChart.dots.length - 1].x"
                                     :cy="latencyChart.dots[latencyChart.dots.length - 1].y"
                                     r="3"
-                                    :style="{ fill: 'var(--bs-primary)' }"
+                                    :style="{ fill: 'var(--ui-accent)' }"
                                 />
                             </svg>
                             <div class="mt-chart-labels">

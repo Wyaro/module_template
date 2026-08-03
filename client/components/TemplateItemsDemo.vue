@@ -2,14 +2,16 @@
 /**
  * Учебный блок CRUD TemplateItem на StatusPage.
  * Компоненты ядра: SearchInput, SelectBox, DataTable, LoadingContentArea, ModalCenter, confirm.
+ * Состояние списка — useRouteQueryState (page / q / active в URL).
  */
-import { computed, defineAsyncComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Pencil, Plus, Trash2 } from 'lucide-vue-next'
 import DataTable from '@/components/DataTable.vue'
 import LoadingContentArea from '@/components/LoadingContentArea.vue'
 import SearchInput from '@/components/SearchInput.vue'
 import SelectBox from '@/components/SelectBox.vue'
+import { useRouteQueryState } from '@/composables/useRouteQueryState.js'
 import { apiClient } from '@/js/api/manager'
 import { confirmDelete } from '@/js/utils/confirm.js'
 import { logError } from '@/js/utils/logError.js'
@@ -28,12 +30,24 @@ const isLoading = ref(false)
 const rows = ref([])
 const totalItems = ref(0)
 const rowsPerPage = ref(12)
-const currentPage = ref(1)
-const searchQuery = ref('')
-const activeFilter = ref('all')
 const showModal = ref(false)
 const editingItem = ref(null)
-let searchTimer = null
+const isQueryWatchReady = ref(false)
+
+const { state: listState, patchState, watchState } = useRouteQueryState({
+  q: { default: '' },
+  page: { default: 1, type: 'number' },
+  active: { default: 'all', enum: ['all', 'true', 'false'] },
+}, { debounceKeys: ['q'] })
+
+const searchQuery = computed(() => listState.value.q)
+const currentPage = computed(() => listState.value.page)
+const activeFilter = computed({
+  get: () => listState.value.active,
+  set: (value) => {
+    patchState({ active: value }, { immediate: true })
+  },
+})
 
 const activeOptions = computed(() => [
   { id: 'all', name: t('module_template.items.filterAll') },
@@ -107,29 +121,24 @@ const loadItems = async () => {
   }
 }
 
-onMounted(() => {
-  loadItems()
+onMounted(async () => {
+  await loadItems()
+  isQueryWatchReady.value = true
 })
 
-watch(activeFilter, () => {
-  currentPage.value = 1
+watchState(() => {
+  if (!isQueryWatchReady.value) {
+    return
+  }
   loadItems()
 })
 
 const handlePageChange = (page) => {
-  currentPage.value = Number(page)
-  loadItems()
+  patchState({ page: Number(page) }, { immediate: true })
 }
 
 const handleSearchQuery = (query) => {
-  searchQuery.value = query
-  if (searchTimer) {
-    clearTimeout(searchTimer)
-  }
-  searchTimer = setTimeout(() => {
-    currentPage.value = 1
-    loadItems()
-  }, 300)
+  patchState({ q: query })
 }
 
 const openCreateModal = () => {
@@ -244,6 +253,7 @@ const deleteItem = async (item) => {
               type="button"
               class="btn btn-sm btn-outline-secondary"
               :title="t('module_template.items.edit')"
+              :aria-label="t('module_template.items.edit')"
               @click="openEditModal(item)"
             >
               <Pencil :size="14" />
@@ -252,6 +262,7 @@ const deleteItem = async (item) => {
               type="button"
               class="btn btn-sm btn-outline-danger"
               :title="t('module_template.items.delete')"
+              :aria-label="t('module_template.items.delete')"
               @click="deleteItem(item)"
             >
               <Trash2 :size="14" />
@@ -278,7 +289,7 @@ const deleteItem = async (item) => {
   gap: 0.75rem;
   padding: 1rem;
   margin-bottom: 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: var(--ui-radius, 0.5rem);
   background: var(--ui-surface, var(--bs-body-bg));
   border: 1px solid var(--ui-border, var(--bs-border-color));
 }

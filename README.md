@@ -109,7 +109,7 @@ ergoms start-client
 
 ## 6. Стили и тема
 
-`--ui-*` / `--bs-*`. `theme-defaults.js` не нужен, пока хватает палитры сайта.
+`--ui-*` (приоритет над `--bs-*`). `theme-defaults.js` не нужен, пока хватает палитры сайта.
 
 По необходимости: `clientEnv.js`, `process_roles.yaml` / `host_lifecycle.yaml`, `vscode.tasks.yaml`, `theme-defaults.js`.
 

@@ -36,9 +36,13 @@
 Для списков с фильтрами опирайтесь на блок [`TemplateItemsDemo.vue`](client/components/TemplateItemsDemo.vue) на StatusPage:
 
 - `SearchInput` + `SelectBox` + `DataTable` внутри `LoadingContentArea`;
+- состояние списка — `useRouteQueryState` (`page` / `q` / `active` в URL);
 - create/edit — `ModalCenter` (`defineAsyncComponent` + `v-if`);
 - delete — `confirmDelete`;
-- ключи API — `public_id`.
+- ключи API — `public_id`;
+- icon-only кнопки — `aria-label` (+ `title`).
+
+`client/js/locales.js` (~650 строк) близок к лимиту 700: при добавлении крупных блоков UI разнесите каталоги на `client/js/locales/{ru,en,fr}.js` и оставьте facade в `locales.js`.
 
 ---
 
