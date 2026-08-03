@@ -1,5 +1,5 @@
 import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { useAppI18n } from '@/i18n/useAppI18n.js'
 import { apiClient } from '@/js/api/manager'
 import { useToast } from '@/js/utils/toast.js'
 import { logError } from '@/js/utils/logError.js'
@@ -10,7 +10,7 @@ const MAX_INPUT_LENGTH = 2000
 
 export function useModuleTemplateML() {
   const toast = useToast()
-  const { t } = useI18n()
+  const { t } = useAppI18n()
 
   const loadingMeta = ref(false)
   const loadingPredict = ref(false)

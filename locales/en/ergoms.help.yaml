@@ -1,10 +1,13 @@
 # en overlay for ergoms.help.yaml (merged over Russian source)
 module: module_template
 title: Module template
-summary: Tutorial template module for new ERGO MS modules
+summary: Living tutorial module; demos of core patterns for new modules
 commands:
   migrate:
     summary: Create and apply module_template migrations
+  patterns-check:
+    summary: Verify the patterns catalog (core_patterns.json) and demo file paths
 notes:
-- 'Invoke: ergoms module_template:migrate'
-- When adding ergoms.conf to a module, create or update ergoms.help.yaml (see .cursor/rules/ergoms-module-help.mdc)
+- 'Invoke: ergoms module_template:<command>'
+- 'In the client: Module template → Core patterns'
+- Demonstrate new platform patterns for modules here first

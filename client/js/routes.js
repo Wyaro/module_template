@@ -25,6 +25,14 @@ export default {
           titleKey: 'module_template.routes.status',
         },
       },
+      {
+        path: 'patterns',
+        name: 'ModuleTemplatePatterns',
+        component: '@/modules/module_template/client/components/PatternsPage.vue',
+        meta: {
+          titleKey: 'module_template.routes.patterns',
+        },
+      },
     ],
   },
 }

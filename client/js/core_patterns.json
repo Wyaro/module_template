@@ -1,0 +1,145 @@
+{
+  "$schema_comment": "Источник истины каталога эталонов module_template. UI и patterns-check читают этот файл.",
+  "patterns": [
+    {
+      "id": "select-box",
+      "category": "ui",
+      "titleKey": "module_template.patterns.items.selectBox.title",
+      "descKey": "module_template.patterns.items.selectBox.desc",
+      "rule": "select-box.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateStatus",
+      "demoFile": "client/components/TemplateItemsDemo.vue"
+    },
+    {
+      "id": "search-input",
+      "category": "ui",
+      "titleKey": "module_template.patterns.items.searchInput.title",
+      "descKey": "module_template.patterns.items.searchInput.desc",
+      "rule": "search-input.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateStatus",
+      "demoFile": "client/components/TemplateItemsDemo.vue"
+    },
+    {
+      "id": "data-table",
+      "category": "ui",
+      "titleKey": "module_template.patterns.items.dataTable.title",
+      "descKey": "module_template.patterns.items.dataTable.desc",
+      "rule": "pagination.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateStatus",
+      "demoFile": "client/components/TemplateItemsDemo.vue"
+    },
+    {
+      "id": "loading-content-area",
+      "category": "ui",
+      "titleKey": "module_template.patterns.items.loadingArea.title",
+      "descKey": "module_template.patterns.items.loadingArea.desc",
+      "rule": "loading-content-area.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateStatus",
+      "demoFile": "client/components/StatusPage.vue"
+    },
+    {
+      "id": "drop-down",
+      "category": "ui",
+      "titleKey": "module_template.patterns.items.dropDown.title",
+      "descKey": "module_template.patterns.items.dropDown.desc",
+      "rule": "components.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateStatus",
+      "demoFile": "client/components/TemplateItemsDemo.vue"
+    },
+    {
+      "id": "form-field",
+      "category": "ui",
+      "titleKey": "module_template.patterns.items.formField.title",
+      "descKey": "module_template.patterns.items.formField.desc",
+      "rule": "components.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateMain",
+      "demoFile": "client/components/MainPage.vue"
+    },
+    {
+      "id": "modal-center",
+      "category": "ui",
+      "titleKey": "module_template.patterns.items.modalCenter.title",
+      "descKey": "module_template.patterns.items.modalCenter.desc",
+      "rule": "modal-center.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateStatus",
+      "demoFile": "client/components/TemplateItemModal.vue"
+    },
+    {
+      "id": "route-query-state",
+      "category": "client",
+      "titleKey": "module_template.patterns.items.routeQuery.title",
+      "descKey": "module_template.patterns.items.routeQuery.desc",
+      "rule": "client_code.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateStatus",
+      "demoFile": "client/components/TemplateItemsDemo.vue"
+    },
+    {
+      "id": "filter-menu",
+      "category": "ui",
+      "titleKey": "module_template.patterns.items.filterMenu.title",
+      "descKey": "module_template.patterns.items.filterMenu.desc",
+      "rule": "filter-menu.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplatePatterns",
+      "demoFile": "client/components/PatternsPage.vue"
+    },
+    {
+      "id": "decimal-input",
+      "category": "ui",
+      "titleKey": "module_template.patterns.items.decimalInput.title",
+      "descKey": "module_template.patterns.items.decimalInput.desc",
+      "rule": "components.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplatePatterns",
+      "demoFile": "client/components/PatternsPage.vue"
+    },
+    {
+      "id": "toast",
+      "category": "client",
+      "titleKey": "module_template.patterns.items.toast.title",
+      "descKey": "module_template.patterns.items.toast.desc",
+      "rule": "client_code.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplatePatterns",
+      "demoFile": "client/components/PatternsPage.vue"
+    },
+    {
+      "id": "i18n",
+      "category": "client",
+      "titleKey": "module_template.patterns.items.i18n.title",
+      "descKey": "module_template.patterns.items.i18n.desc",
+      "rule": "i18n.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplatePatterns",
+      "demoFile": "client/js/locales.js"
+    },
+    {
+      "id": "public-id",
+      "category": "api",
+      "titleKey": "module_template.patterns.items.publicId.title",
+      "descKey": "module_template.patterns.items.publicId.desc",
+      "rule": "security.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateStatus",
+      "demoFile": "api/models.py"
+    },
+    {
+      "id": "module-bridge",
+      "category": "api",
+      "titleKey": "module_template.patterns.items.bridge.title",
+      "descKey": "module_template.patterns.items.bridge.desc",
+      "rule": "module-contracts.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateMain",
+      "demoFile": "api/integrations.py"
+    }
+  ]
+}

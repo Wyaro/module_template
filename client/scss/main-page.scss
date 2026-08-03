@@ -4,19 +4,14 @@
   width: 100%;
 }
 
-// ─── Основная карточка ────────────────────────────────────────────────────────
 .main-card {
   background: var(--ui-surface);
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius-lg);
-  box-shadow: var(--ui-shadow-md);
   overflow: hidden;
   width: 100%;
-  max-width: none;
-  margin: 0;
 }
 
-// ─── Шапка ────────────────────────────────────────────────────────────────────
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -75,33 +70,34 @@
   font-size: 0.72rem;
   font-weight: 600;
   padding: 3px 9px;
-  border-radius: var(--ui-pill);
-  background: var(--ui-surface-2);
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-surface);
   color: var(--ui-text-muted);
   border: 1px solid var(--ui-border);
-  letter-spacing: 0.02em;
 
   &--accent {
-    background: var(--ui-accent-soft);
     color: var(--ui-accent);
-    border-color: var(--ui-border);
+    border-color: color-mix(in srgb, var(--ui-accent) 35%, var(--ui-border));
+    background: var(--ui-accent-soft);
   }
 }
 
-// ─── Контент ──────────────────────────────────────────────────────────────────
 .card-content {
-  padding: 32px 32px 28px;
+  padding: 24px 28px 28px;
 }
 
-// ─── Заголовок секции ─────────────────────────────────────────────────────────
+.welcome-section {
+  margin-bottom: 22px;
+}
+
 .section-heading {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 1.15rem;
+  margin: 0 0 8px;
+  font-size: 1.05rem;
   font-weight: 600;
   color: var(--ui-text);
-  margin-bottom: 10px;
 }
 
 .section-icon {
@@ -109,45 +105,29 @@
   flex-shrink: 0;
 }
 
-// ─── Приветствие ──────────────────────────────────────────────────────────────
-.welcome-section {
-  margin-bottom: 28px;
-}
-
 .welcome-description {
+  margin: 0;
+  font-size: 0.88rem;
   color: var(--ui-text-muted);
-  font-size: 0.95rem;
-  line-height: 1.65;
+  line-height: 1.55;
   max-width: none;
-  margin-bottom: 0;
 }
 
-// ─── Сетка фич ───────────────────────────────────────────────────────────────
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 14px;
-  margin-bottom: 28px;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .feature-item {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 14px 14px 12px;
+  padding: 14px;
   background: var(--ui-surface-2);
   border-radius: var(--ui-radius);
   border: 1px solid var(--ui-border);
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.18s ease;
-
-  &:hover {
-    border-color: var(--ui-accent);
-    box-shadow: var(--ui-shadow-md);
-    transform: translateY(-2px);
-  }
 }
 
 .feature-icon {
@@ -156,11 +136,10 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  border-radius: 8px;
+  border-radius: var(--ui-radius-sm);
   background: var(--ui-accent-soft);
   color: var(--ui-accent);
   flex-shrink: 0;
-  margin-top: 1px;
 }
 
 .feature-icon--monitoring {
@@ -205,13 +184,12 @@
 
 .feature-tag {
   font-size: 0.67rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 1px 7px;
-  border-radius: var(--ui-pill);
-  background: var(--ui-accent-soft);
-  color: var(--ui-accent);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  border-radius: var(--ui-radius-sm);
+  background: var(--ui-surface);
+  color: var(--ui-text-muted);
+  border: 1px solid var(--ui-border);
 }
 
 .feature-desc {
@@ -220,14 +198,11 @@
   line-height: 1.45;
 }
 
-// ─── Кнопка перехода ──────────────────────────────────────────────────────────
 .action-section {
   padding-top: 16px;
   border-top: 1px solid var(--ui-border);
-  margin-bottom: 0;
 }
 
-// ─── ML-демо ─────────────────────────────────────────────────────────────────
 .ml-demo {
   padding-top: 28px;
   margin-top: 28px;
@@ -239,7 +214,7 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .ml-header-text {
@@ -247,69 +222,40 @@
   min-width: 0;
 }
 
-.ml-badge {
-  align-self: flex-start;
-  white-space: nowrap;
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 4px 12px;
-  border-radius: var(--ui-pill);
-  background: var(--ui-accent-soft);
-  color: var(--ui-accent);
-  border: 1px solid var(--ui-border);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-// ─── ML-карточки ─────────────────────────────────────────────────────────────
-.ml-card {
-  background: var(--ui-surface-2);
-  border: 1px solid var(--ui-border);
-  border-radius: var(--ui-radius);
-  padding: 18px 18px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.ml-card-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ui-text-muted);
-  margin-bottom: 14px;
-}
-
 .char-counter {
   text-align: right;
   font-size: 0.72rem;
   color: var(--ui-text-muted);
-  margin-top: 3px;
+  margin-top: 0.35rem;
 }
 
-.ml-examples {
+.ml-result {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  flex-direction: column;
+  gap: 0;
+  padding: 1rem;
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  min-height: 100%;
+}
+
+.ml-result__title {
+  display: inline-flex;
   align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ui-text);
 }
 
-.ml-examples-label {
-  font-size: 0.78rem;
-  color: var(--ui-text-muted);
+.ml-result__loading {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
 }
 
-.ml-example-chip {
-  font-size: 0.72rem;
-  padding: 2px 10px;
-  border-radius: var(--ui-pill);
-}
-
-// ─── Метаданные модели ────────────────────────────────────────────────────────
 .model-meta-row {
   display: flex;
   flex-wrap: wrap;
@@ -317,9 +263,8 @@
 }
 
 .model-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  display: inline-flex;
+  gap: 0.35rem;
   font-size: 0.78rem;
 }
 
@@ -328,63 +273,32 @@
 }
 
 .model-meta-val {
-  font-weight: 600;
   color: var(--ui-text);
+  font-weight: 500;
+  font-family: var(--font-family-mono);
 }
 
-// ─── Пустое состояние ─────────────────────────────────────────────────────────
 .ml-empty {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 32px 16px;
+  gap: 0.5rem;
+  padding: 2rem 1rem;
   color: var(--ui-text-muted);
-
-  p {
-    margin: 0;
-    font-size: 0.85rem;
-  }
+  text-align: center;
+  font-size: 0.88rem;
 }
 
 .ml-empty-icon {
-  opacity: 0.25;
+  opacity: 0.45;
 }
 
-// ─── Скелетон ────────────────────────────────────────────────────────────────
-.ml-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 8px 0;
-}
-
-.skeleton-line {
-  height: 14px;
-  border-radius: 6px;
-  background: linear-gradient(
-    90deg,
-    var(--ui-surface-2) 25%,
-    var(--ui-surface-2) 50%,
-    var(--ui-surface-2) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.4s ease infinite;
-}
-
-@keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-// ─── Результат классификации ──────────────────────────────────────────────────
 .result-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 16px;
-  margin-bottom: 14px;
+  gap: 12px 16px;
+  margin-bottom: 12px;
 }
 
 .result-item {
@@ -411,180 +325,118 @@
   font-weight: 500;
 }
 
-.result-badge {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: var(--ui-pill);
-  font-size: 0.78rem;
-  font-weight: 700;
-  width: fit-content;
-}
-
-// Категории
-.badge-cat--error    { background: var(--ui-danger-soft); color: var(--ui-danger); }
-.badge-cat--urgent   { background: var(--ui-warning-soft); color: var(--ui-warning); }
-.badge-cat--request  { background: var(--ui-accent-soft); color: var(--ui-accent); }
-.badge-cat--report   { background: var(--ui-info-soft); color: var(--ui-info); }
-.badge-cat--task     { background: var(--ui-success-soft); color: var(--ui-success); }
-.badge-cat--other    { background: var(--ui-surface-2); color: var(--ui-text-muted); }
-
-// Приоритеты
-.badge-pri--high   { background: var(--ui-danger-soft); color: var(--ui-danger); }
-.badge-pri--medium { background: var(--ui-warning-soft); color: var(--ui-warning); }
-.badge-pri--low    { background: var(--ui-success-soft); color: var(--ui-success); }
-
-// Балл
 .result-score-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.65rem;
 }
 
 .result-score-num {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--ui-accent);
-  min-width: 36px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ui-text);
+  min-width: 2rem;
 }
 
-.score-bar-track {
-  flex: 1;
-  height: 6px;
-  border-radius: 3px;
+.result-score-wrap .progress {
+  flex: 1 1 auto;
+  height: 0.4rem;
   background: var(--ui-surface-2);
-  overflow: hidden;
 }
 
-.score-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: var(--ui-accent);
-  transition: width 0.4s ease;
-}
-
-// Ключевые слова
 .result-keywords {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 2px;
+  gap: 0.35rem;
 }
 
-.kw-chip {
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 2px 9px;
-  border-radius: var(--ui-pill);
-  background: var(--ui-accent-soft);
-  color: var(--ui-accent);
-  border: 1px solid var(--ui-border);
-}
-
-// ─── Сырой JSON ───────────────────────────────────────────────────────────────
 .raw-json-details {
-  margin-top: 10px;
-  border-top: 1px solid var(--ui-border);
-  padding-top: 8px;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--ui-text-muted);
 
   summary {
-    font-size: 0.75rem;
-    color: var(--ui-text-muted);
     cursor: pointer;
     user-select: none;
-
-    &:hover {
-      color: var(--ui-text);
-    }
   }
 }
 
 .raw-json {
-  margin: 8px 0 0;
-  padding: 10px 12px;
-  font-size: 0.72rem;
-  line-height: 1.5;
+  margin: 0.5rem 0 0;
+  padding: 0.75rem;
+  border-radius: var(--ui-radius-sm);
   background: var(--ui-surface-2);
-  border-radius: 6px;
   border: 1px solid var(--ui-border);
-  overflow-x: auto;
-  max-height: 200px;
-  overflow-y: auto;
+  color: var(--ui-text);
+  font-family: var(--font-family-mono);
+  font-size: 0.72rem;
+  overflow: auto;
+  max-height: 220px;
 }
 
-// ─── Подсказка студентам ─────────────────────────────────────────────────────
 .ml-hint {
-  margin-top: 14px;
-  padding-top: 12px;
   display: flex;
   align-items: flex-start;
-  gap: 5px;
-  font-size: 0.75rem;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.85rem;
+  font-size: 0.78rem;
   color: var(--ui-text-muted);
-  border-top: 1px dashed var(--ui-border);
-
-  svg {
-    flex-shrink: 0;
-    margin-top: 1px;
-    color: var(--ui-warning);
-  }
+  border-top: 1px solid var(--ui-border);
 }
 
-// ─── How-to блок ──────────────────────────────────────────────────────────────
 .mt-howto {
-  margin-top: 28px;
-  padding-top: 20px;
+  padding-top: 24px;
+  margin-top: 8px;
   border-top: 1px solid var(--ui-border);
 }
 
 .mt-howto-list {
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.65rem;
 }
 
 .mt-howto-item {
-  padding: 10px 0;
-  border-bottom: 1px dashed var(--ui-border);
-
-  &:last-child {
-    border-bottom: none;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-surface-2);
 }
 
 .mt-howto-title {
-  display: block;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--ui-text);
-  margin-bottom: 2px;
 }
 
 .mt-howto-desc {
-  display: block;
   font-size: 0.8rem;
   color: var(--ui-text-muted);
-
-  code {
-    font-size: 0.78rem;
-    background: var(--ui-surface-2);
-    padding: 1px 4px;
-    border-radius: 3px;
-  }
 }
 
-// ─── Спиннер иконки ───────────────────────────────────────────────────────────
 .spin {
   animation: spin 0.8s linear infinite;
+
+  html[data-ergo-motion='reduce'] & {
+    animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-// ─── Адаптивность ─────────────────────────────────────────────────────────────
 @media (max-width: 767.98px) {
   .card-header {
     flex-direction: column;
@@ -592,8 +444,8 @@
     padding: 14px 18px;
   }
 
-  .header-meta {
-    margin-top: 4px;
+  .card-content {
+    padding: 18px;
   }
 
   .module-logo {
@@ -607,28 +459,5 @@
 
   .result-item--full {
     grid-column: 1;
-  }
-}
-
-@media (max-width: 575.98px) {
-  .mt-main-page {
-    padding: 12px;
-  }
-
-  .card-content {
-    padding: 20px 16px 18px;
-  }
-
-  .ml-header {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .ml-badge {
-    align-self: flex-start;
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr;
   }
 }

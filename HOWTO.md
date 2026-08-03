@@ -2,6 +2,19 @@
 
 Этот файл дополняет `README.md` короткими практическими сценариями.
 
+`module_template` — **живой шаблон**: любой новый паттерн платформы для модулей
+сначала демонстрируется здесь (реестр `client/js/core_patterns.json`, страница «Паттерны ядра»).
+Правило: `.cursor/rules/module-template-living.mdc`. Проверка: `ergoms module_template:patterns-check`.
+
+---
+
+## 0. Добавить демо нового паттерна ядра
+
+1. Реализуйте демо на `PatternsPage.vue`, Status CRUD или Main (исполняемый UI/API, не только текст).
+2. Добавьте запись в [`client/js/core_patterns.json`](client/js/core_patterns.json) со `status: "demoed"`, `demoFile`, `demoRoute`, `rule`.
+3. Ключи подписей — в `client/js/locales/{ru,en,fr}.js` → `module_template.patterns.*`.
+4. Запустите `ergoms module_template:patterns-check` (ожидается exit 0).
+
 ---
 
 ## 1. Заменить rule-based модель на свою ML-модель
@@ -12,6 +25,7 @@
 4. Обновите `get_model_meta()`.
 
 Клиент (`MainPage.vue` + `useModuleTemplateML.js`) подхватит ответ при той же структуре.
+Форма ввода — `FormCard` / `FormField` / `SelectBox` (примеры текста), не chip-кнопки.
 
 ---
 
@@ -37,10 +51,12 @@
 
 - `SearchInput` + `SelectBox` + `DataTable` внутри `LoadingContentArea`;
 - состояние списка — `useRouteQueryState` (`page` / `q` / `active` в URL);
-- create/edit — `ModalCenter` (`defineAsyncComponent` + `v-if`);
+- create/edit — `ModalCenter` + `FormCard`/`FormField` (`defineAsyncComponent` + `v-if`);
+- действия строки — `DropDown` (`compact`);
 - delete — `confirmDelete`;
+- строки UI — `useAppI18n()`;
 - ключи API — `public_id`;
-- icon-only кнопки — `aria-label` (+ `title`).
+- icon-only кнопки — `aria-label`.
 
 `client/js/locales.js` (~650 строк) близок к лимиту 700: при добавлении крупных блоков UI разнесите каталоги на `client/js/locales/{ru,en,fr}.js` и оставьте facade в `locales.js`.
 
@@ -99,8 +115,9 @@ ergoms start-worker
 ## 8. Команды
 
 ```bash
+ergoms module_template:patterns-check
 ergoms module_template:migrate
 ergoms dev
 ergoms start-client
-ergoms help
+ergoms help module module_template
 ```

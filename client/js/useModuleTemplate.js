@@ -1,10 +1,10 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { useAppI18n } from '@/i18n/useAppI18n.js'
+import { getCurrentBcp47 } from '@/i18n/index.js'
 import { apiClient } from '@/js/api/manager'
 import { useToast } from '@/js/utils/toast.js'
 import { logError } from '@/js/utils/logError.js'
 import { formatDateTime } from '@/js/utils/timeUtils.js'
-import { getCurrentBcp47 } from '@/i18n/index.js'
 
 import { moduleTemplateEndpoints } from './endpoints'
 
@@ -28,7 +28,7 @@ const avg = (arr) => arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : 
 
 export function useModuleTemplateStatus() {
     const toast = useToast()
-    const { t } = useI18n()
+    const { t } = useAppI18n()
     /** Первая загрузка — полный спиннер LoadingContentArea */
     const loading = ref(false)
     /** Повторное обновление (кнопка / авто) — без сброса layout */

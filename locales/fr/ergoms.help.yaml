@@ -1,10 +1,13 @@
 # fr overlay for ergoms.help.yaml (merged over Russian source)
 module: module_template
 title: Modèle de module
-summary: Module modèle pédagogique pour les nouveaux modules ERGO MS
+summary: Module pédagogique vivant ; démos des motifs du noyau pour les nouveaux modules
 commands:
   migrate:
     summary: Créer et appliquer les migrations module_template
+  patterns-check:
+    summary: Vérifier le catalogue d’étapes (core_patterns.json) et les fichiers de démo
 notes:
-- 'Appel : ergoms module_template:migrate'
-- Lors de l'ajout d'ergoms.conf à un module, créez ou mettez à jour ergoms.help.yaml (voir .cursor/rules/ergoms-module-help.mdc)
+- 'Appel : ergoms module_template:<commande>'
+- 'Dans le client : Modèle de module → Motifs du noyau'
+- Démontrer d’abord ici tout nouveau motif plateforme pour les modules

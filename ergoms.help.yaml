@@ -1,10 +1,13 @@
 # Source of truth (ru). Translations: locales/<lang>/ergoms.help.yaml
 module: module_template
 title: Шаблон модуля
-summary: Учебный модуль-шаблон для новых модулей ERGO MS
+summary: Живой учебный модуль-эталон; демо паттернов ядра для новых модулей
 commands:
   migrate:
     summary: Создать и применить миграции module_template
+  patterns-check:
+    summary: Проверить каталог эталонов (core_patterns.json) и наличие файлов демо
 notes:
-- 'Вызов: ergoms module_template:migrate'
-- При добавлении ergoms.conf в модуль создайте или обновите ergoms.help.yaml (см. .cursor/rules/ergoms-module-help.mdc)
+- 'Вызов: ergoms module_template:<команда>'
+- 'Живой каталог в клиенте: Шаблон модуля → Паттерны ядра'
+- Новый паттерн платформы для модулей сначала демонстрируйте здесь

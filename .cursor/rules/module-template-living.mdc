@@ -1,0 +1,66 @@
+---
+description: module_template — живой шаблон; новый функционал ядра для модулей обязан иметь демо здесь
+globs:
+  - "modules/module_template/**"
+alwaysApply: false
+---
+
+# module_template — живой шаблон
+
+`modules/module_template` — **канонический учебный и эталонный модуль** ERGO MS. Новый модуль копирует его структуру; новый паттерн платформы для модулей **сначала** появляется здесь как рабочее демо.
+
+## Кратко
+
+- Это не «заготовка на полку», а **живой эталон**: код, меню, i18n, bridge, UI ядра
+- Реестр эталонов — `client/js/core_patterns.json`
+- Страница каталога — `ModuleTemplatePatterns` (`PatternsPage.vue`)
+- Проверка — `ergoms module_template:patterns-check` (exit 0 только если все `demoed` и файлы существуют)
+- При задаче «новый модуль» / «как сделать X в модуле» — смотри этот каталог и HOWTO, не выдумывай параллельный UI
+
+## Обязательно при новом паттерне платформы для модулей
+
+Если в ядре появляется **переиспользуемый** паттерн, которым должны пользоваться модули (компонент UI, composable списка, confirm/toast, public_id, bridge-группа, hook-файл и т.п.):
+
+1. Добавь **рабочее демо** в `module_template` (страница Patterns, Status CRUD или Main).
+2. Зарегистрируй запись в `client/js/core_patterns.json` со `status: "demoed"`, `demoFile`, `demoRoute`, `rule`.
+3. Добавь ключи i18n в `client/js/locales/{ru,en,fr}.js` (`module_template.patterns.*`).
+4. Обнови `.cursor/rules/module-template.mdc` / HOWTO при необходимости.
+5. Прогони `ergoms module_template:patterns-check` — должен вернуть 0.
+
+## Что считать «паттерном для модулей»
+
+| Да — демо в шаблоне | Нет — не тащить в шаблон |
+|---|---|
+| Новый компонент из `components.mdc` для модулей | Внутренний рефактор ядра без контракта для модулей |
+| Новый composable списков / query state | Багфикс без смены API для модулей |
+| Новый способ модалок / confirm / toast | Чисто админский экран CMS без модульного API |
+| Новый hook модуля (`theme-defaults`, locales, routeGuard) | Домен конкретного боевого модуля |
+| Platform-контракт ModuleBridge для модулей | Секреты, prod-only infra |
+
+## Запрещено
+
+- Добавлять в ядре «как модулям делать X», не показав X в `module_template`
+- Держать в каталоге `status: "demoed"` с несуществующим `demoFile`
+- Копировать в шаблон домен других модулей или хардкодить их имена
+- Считать README достаточным демо — нужен **исполняемый** UI или API-пример в модуле
+
+## Как проверить
+
+```bash
+ergoms module_template:patterns-check
+ergoms module_template:migrate
+ergoms start-client
+```
+
+В клиенте: меню «Шаблон модуля» → «Паттерны ядра».
+
+## Связанные файлы
+
+| Тема | Путь |
+|------|------|
+| Реестр | `client/js/core_patterns.json` |
+| UI каталога | `client/components/PatternsPage.vue` |
+| CRUD-эталон | `client/components/TemplateItemsDemo.vue` |
+| Сценарии | `HOWTO.md` |
+| Базовые запреты модуля | `.cursor/rules/module-template.mdc` |
+| Платформа | корневые `.cursor/rules/modules.mdc`, `components.mdc` |

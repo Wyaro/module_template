@@ -18,40 +18,36 @@
                     </p>
                 </div>
             </div>
-            <div class="mt-controls">
+            <div class="mt-controls" role="group" :aria-label="t('module_template.status.monitoringBadge')">
                 <span class="mt-monitoring-badge">{{ t('module_template.status.monitoringBadge') }}</span>
-                <div class="mt-controls-row">
-                    <div class="form-check form-switch mb-0">
-                        <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="mt-auto-refresh"
-                            v-model="autoRefreshEnabled"
-                            @change="setupAutoRefresh"
-                        />
-                        <label class="form-check-label small" for="mt-auto-refresh">
-                            {{ t('module_template.status.autoRefresh', { seconds: autoRefreshSeconds }) }}
-                        </label>
-                    </div>
-                    <button
-                        class="btn btn-sm btn-primary d-flex align-items-center gap-1"
-                        @click="refreshStatus"
-                        :disabled="isBusy"
-                        :aria-busy="isBusy"
-                    >
-                        <RefreshCw :size="14" :class="{ spin: isBusy }" />
-                        {{ t('module_template.status.refresh') }}
-                    </button>
+                <div class="form-check form-switch mt-auto-refresh mb-0">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="mt-auto-refresh"
+                        v-model="autoRefreshEnabled"
+                        @change="setupAutoRefresh"
+                    />
+                    <label class="mt-auto-refresh__label" for="mt-auto-refresh">
+                        {{ t('module_template.status.autoRefresh', { seconds: autoRefreshSeconds }) }}
+                    </label>
                 </div>
+                <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary mt-controls__refresh"
+                    @click="refreshStatus"
+                    :disabled="isBusy"
+                    :aria-busy="isBusy"
+                >
+                    <RefreshCw :size="14" :class="{ spin: isBusy }" />
+                    {{ t('module_template.status.refresh') }}
+                </button>
             </div>
         </div>
 
-        <div
-            class="mt-status-content"
-            :class="{ 'mt-status-content--refreshing': refreshing }"
-        >
         <LoadingContentArea
-            :loading="loading"
+            :loading="isBusy"
             min-height="16rem"
             :loading-text="t('module_template.loading')"
         >
@@ -327,7 +323,6 @@
         </div>
 
         </LoadingContentArea>
-        </div>
 
         <TemplateItemsDemo />
 
@@ -350,7 +345,6 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import {
     Activity, RefreshCw, CheckCircle, XCircle, Database,
     Clock, Server, Zap, AlertTriangle, TrendingUp,
@@ -358,14 +352,15 @@ import {
 } from 'lucide-vue-next'
 
 import LoadingContentArea from '@/components/LoadingContentArea.vue'
+import { useAppI18n } from '@/i18n/useAppI18n.js'
 import { useModuleTemplateStatus, ALERT_THRESHOLDS, getAlertLevel } from '../js/useModuleTemplate'
 import TemplateItemsDemo from './TemplateItemsDemo.vue'
 
 const HISTORY_LIMIT = 30
-const { t } = useI18n()
+const { t } = useAppI18n()
 
 const {
-    loading, refreshing, isBusy, statusData, lastUpdated, history,
+    isBusy, statusData, lastUpdated, history,
     autoRefreshEnabled, autoRefreshSeconds,
     latencyLevel, rpsLevel, errorRateLevel,
     metricAggregates, refreshStatus,

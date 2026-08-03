@@ -1,13 +1,15 @@
 # Module Template (module_template)
 
-Учебный модуль для системы ERGO MS. Показывает, как в одном месте собрать:
+**Живой шаблон** ERGO MS: отправная точка для новых модулей и обязательное место демо
+новых паттернов платформы для модулей (см. `.cursor/rules/module-template-living.mdc`).
+
+В одном месте собраны:
 
 - health-check и мониторинг сервиса,
-- простую rule-based «ML-модель»,
+- rule-based «ML-модель»,
 - типовой CRUD API и Vue-клиент на компонентах ядра,
+- каталог паттернов (`core_patterns.json` + страница «Паттерны ядра»),
 - права модуля, аудит CRUD и i18n через hook `locales.js`.
-
-Модуль задуман как отправная точка для студенческих и исследовательских модулей СКБ.
 
 ---
 
@@ -32,9 +34,10 @@ modules/module_template/
 │   └── migrations/
 ├── client/
 │   ├── js/
-│   │   ├── routes.js          # Main + Status
+│   │   ├── routes.js          # Main + Status + Patterns
 │   │   ├── endpoints.js
-│   │   ├── locales.js         # ru / en / fr
+│   │   ├── locales.js         # facade → locales/{ru,en,fr}.js
+│   │   ├── core_patterns.json # реестр эталонов для patterns-check
 │   │   ├── permission-rules.js
 │   │   ├── integrations.js
 │   │   ├── routeGuard.js
@@ -43,12 +46,15 @@ modules/module_template/
 │   ├── components/
 │   │   ├── MainPage.vue
 │   │   ├── StatusPage.vue
+│   │   ├── PatternsPage.vue       # каталог + песочница паттернов ядра
 │   │   ├── TemplateItemsDemo.vue  # CRUD-блок на Status (компоненты ядра)
-│   │   └── TemplateItemModal.vue  # ModalCenter create/edit
+│   │   └── TemplateItemModal.vue  # ModalCenter + FormCard/FormField
 │   ├── ParentLayout.vue
 │   ├── package.json
 │   ├── scss/
 │   └── assets/
+├── scripts/
+│   └── patterns_check.py      # ergoms module_template:patterns-check
 ├── mcp/                       # эталон manifest (без server.py — не регистрируется)
 ├── .cursor/rules/             # правила Cursor модуля (*.mdc)
 ├── AGENTS.md                  # fallback для агента без расширения
@@ -66,6 +72,7 @@ modules/module_template/
 ## 2. Как запустить
 
 ```bash
+ergoms module_template:patterns-check
 ergoms module_template:migrate
 ergoms dev
 ergoms start-client
@@ -74,7 +81,8 @@ ergoms start-client
 После запуска:
 
 1. Главная (`ModuleTemplateMain`) — ML-демо.
-2. Статус (`ModuleTemplateStatus`) — health, метрики (`LoadingContentArea`) и блок TemplateItem (DataTable / ModalCenter / confirm).
+2. Статус (`ModuleTemplateStatus`) — health, метрики и блок TemplateItem (CRUD на компонентах ядра).
+3. Паттерны (`ModuleTemplatePatterns`) — живой каталог эталонов и песочница UI.
 
 Нужно право `module_template_view` (или глобальный администратор).
 
@@ -87,8 +95,9 @@ ergoms start-client
 | Место | Компоненты |
 |-------|------------|
 | Status (метрики) | `LoadingContentArea` |
-| Status (список TemplateItem) | `SearchInput`, `SelectBox`, `DataTable`, `LoadingContentArea`, `ModalCenter`, `confirmDelete` |
-| Main (ML) | `ContentImage`, toast, `logError`, строки из `locales.js` |
+| Status (список TemplateItem) | `SearchInput`, `SelectBox`, `DataTable`, `DropDown`, `LoadingContentArea`, `ModalCenter` + `FormCard`/`FormField`, `confirmDelete` |
+| Patterns | `FilterMenu`, `DecimalInput`, `FormCard`/`FormField`, toast, confirm, реестр `core_patterns.json` |
+| Main (ML) | `ContentImage`, toast, `logError`, `useAppI18n` |
 | Lookup API | `public_id`, не pk БД |
 
 ---

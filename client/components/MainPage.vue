@@ -58,14 +58,21 @@
                     </div>
                 </div>
 
-                <!-- ───── Кнопка перехода ───── -->
-                <div class="action-section">
+                <!-- ───── Кнопки перехода ───── -->
+                <div class="action-section d-flex flex-wrap gap-2">
                     <router-link
                         :to="{ name: 'ModuleTemplateStatus' }"
-                        class="btn btn-primary d-inline-flex align-items-center gap-2"
+                        class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2"
                     >
                         <Activity :size="16" />
                         {{ t('module_template.monitorService') }}
+                    </router-link>
+                    <router-link
+                        :to="{ name: 'ModuleTemplatePatterns' }"
+                        class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-2"
+                    >
+                        <BookOpen :size="16" />
+                        {{ t('module_template.routes.patterns') }}
                     </router-link>
                 </div>
 
@@ -81,65 +88,67 @@
                                 {{ t('module_template.ml.description') }}
                             </p>
                         </div>
-                        <span class="ml-badge">{{ t('module_template.ml.badge') }}</span>
+                        <span class="badge text-bg-secondary">{{ t('module_template.ml.badge') }}</span>
                     </div>
 
-                    <div class="row g-4 align-items-stretch">
-
-                        <!-- Левая карточка: ввод -->
+                    <div class="row g-3 align-items-stretch">
                         <div class="col-lg-5">
-                            <div class="ml-card h-100">
-                                <div class="ml-card-label">
-                                    <FileText :size="14" />
-                                    {{ t('module_template.ml.inputLabel') }}
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label form-label-sm">{{ t('module_template.ml.textLabel') }}</label>
+                            <FormCard class="h-100">
+                                <FormField
+                                    :label="t('module_template.ml.textLabel')"
+                                    label-for="mt-ml-text"
+                                >
                                     <textarea
+                                        id="mt-ml-text"
                                         v-model="inputText"
                                         class="form-control form-control-sm"
                                         rows="5"
                                         :placeholder="t('module_template.ml.textPlaceholder')"
                                         maxlength="2000"
-                                    ></textarea>
+                                    />
                                     <div class="char-counter">{{ inputText.length }}&thinsp;/&thinsp;2000</div>
-                                </div>
-
-                                <div class="ml-examples mb-3">
-                                    <span class="ml-examples-label">{{ t('module_template.ml.examples') }}</span>
-                                    <button
-                                        v-for="ex in examples"
-                                        :key="ex.id"
-                                        type="button"
-                                        class="btn btn-sm btn-outline-secondary ml-example-chip"
-                                        @click="applyExample(ex.text)"
-                                    >
-                                        {{ ex.label }}
-                                    </button>
-                                </div>
-
-                                <button
-                                    class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2"
-                                    @click="sendPredict"
-                                    :disabled="loadingPredict || !inputText.trim()"
+                                </FormField>
+                                <FormField
+                                    :label="t('module_template.ml.examples')"
+                                    label-for="mt-ml-example"
+                                    last
                                 >
-                                    <Activity :size="15" :class="{ spin: loadingPredict }" />
-                                    <span>{{ loadingPredict ? t('module_template.ml.classifying') : t('module_template.ml.classify') }}</span>
-                                </button>
-                            </div>
+                                    <SelectBox
+                                        id="mt-ml-example"
+                                        v-model="selectedExampleId"
+                                        :options="examples"
+                                        value-key="id"
+                                        label-key="label"
+                                        :include-all-option="true"
+                                        :all-label="t('module_template.ml.examplesPlaceholder')"
+                                    />
+                                </FormField>
+                                <template #footer>
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2"
+                                        :disabled="loadingPredict || !inputText.trim()"
+                                        @click="sendPredict"
+                                    >
+                                        <Activity :size="15" :class="{ spin: loadingPredict }" />
+                                        <span>
+                                            {{ loadingPredict
+                                                ? t('module_template.ml.classifying')
+                                                : t('module_template.ml.classify') }}
+                                        </span>
+                                    </button>
+                                </template>
+                            </FormCard>
                         </div>
 
-                        <!-- Правая карточка: результат -->
                         <div class="col-lg-7">
-                            <div class="ml-card h-100">
-                                <div class="ml-card-label">
-                                    <BarChart2 :size="14" />
+                            <div class="ml-result h-100">
+                                <div class="ml-result__title">
+                                    <BarChart2 :size="16" />
                                     {{ t('module_template.ml.resultHeading') }}
                                 </div>
 
-                                <!-- Метаданные модели -->
-                                <div class="model-meta-row mb-3" v-if="modelMeta">
+                                <div v-if="modelMeta" class="model-meta-row mb-3">
                                     <span class="model-meta-item">
                                         <span class="model-meta-key">{{ t('module_template.ml.model') }}:</span>
                                         <span class="model-meta-val">{{ modelMeta.model_name }}</span>
@@ -153,35 +162,33 @@
                                         <span class="model-meta-val">{{ modelMeta.model_version }}</span>
                                     </span>
                                 </div>
-                                <div class="model-meta-row mb-3 text-muted small" v-else-if="loadingMeta">
+                                <p v-else-if="loadingMeta" class="text-muted small mb-3">
                                     {{ t('module_template.ml.loadingMeta') }}
+                                </p>
+
+                                <div v-if="loadingPredict" class="ml-result__loading">
+                                    <SpinnerLoading />
                                 </div>
 
-                                <!-- Пустое состояние -->
-                                <div class="ml-empty" v-if="!prediction && !loadingPredict">
-                                    <BrainCircuit :size="32" class="ml-empty-icon" />
-                                    <p>{{ t('module_template.ml.emptyResult') }}</p>
+                                <div v-else-if="!prediction" class="ml-empty">
+                                    <BrainCircuit :size="28" class="ml-empty-icon" aria-hidden="true" />
+                                    <p class="mb-0">{{ t('module_template.ml.emptyResult') }}</p>
                                 </div>
 
-                                <!-- Скелетон загрузки -->
-                                <div class="ml-skeleton" v-else-if="loadingPredict">
-                                    <div class="skeleton-line" style="width: 60%"></div>
-                                    <div class="skeleton-line" style="width: 45%"></div>
-                                    <div class="skeleton-line" style="width: 80%"></div>
-                                </div>
-
-                                <!-- Структурированный результат -->
-                                <template v-else-if="prediction">
+                                <template v-else>
                                     <div class="result-grid">
                                         <div class="result-item">
                                             <span class="result-key">{{ t('module_template.ml.category') }}</span>
-                                            <span :class="['result-val', 'result-badge', `badge-cat--${prediction.category}`]">
+                                            <span class="badge text-bg-primary">
                                                 {{ categoryLabel(prediction.category) }}
                                             </span>
                                         </div>
                                         <div class="result-item">
                                             <span class="result-key">{{ t('module_template.ml.priority') }}</span>
-                                            <span :class="['result-val', 'result-badge', `badge-pri--${prediction.priority}`]">
+                                            <span
+                                                class="badge"
+                                                :class="priorityBadgeClass(prediction.priority)"
+                                            >
                                                 {{ priorityLabel(prediction.priority) }}
                                             </span>
                                         </div>
@@ -189,11 +196,11 @@
                                             <span class="result-key">{{ t('module_template.ml.score') }}</span>
                                             <div class="result-score-wrap">
                                                 <span class="result-score-num">{{ prediction.score }}</span>
-                                                <div class="score-bar-track">
+                                                <div class="progress" role="progressbar" :aria-valuenow="prediction.score" aria-valuemin="0" aria-valuemax="100">
                                                     <div
-                                                        class="score-bar-fill"
+                                                        class="progress-bar"
                                                         :style="{ width: prediction.score + '%' }"
-                                                    ></div>
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -203,32 +210,36 @@
                                                 {{ prediction.text_length }}&thinsp;/&thinsp;{{ prediction.sentence_count }}
                                             </span>
                                         </div>
-                                        <div class="result-item result-item--full" v-if="prediction.matched_keywords?.length">
+                                        <div
+                                            v-if="prediction.matched_keywords?.length"
+                                            class="result-item result-item--full"
+                                        >
                                             <span class="result-key">{{ t('module_template.ml.matchedKeys') }}</span>
                                             <div class="result-keywords">
                                                 <span
                                                     v-for="kw in prediction.matched_keywords"
                                                     :key="kw"
-                                                    class="kw-chip"
+                                                    class="badge text-bg-secondary"
                                                 >{{ kw }}</span>
                                             </div>
                                         </div>
-                                        <div class="result-item result-item--full" v-if="prediction.note">
+                                        <div
+                                            v-if="prediction.note"
+                                            class="result-item result-item--full"
+                                        >
                                             <span class="result-key">{{ t('module_template.ml.note') }}</span>
                                             <span class="result-val text-muted">{{ prediction.note }}</span>
                                         </div>
                                     </div>
 
-                                    <!-- Сырой JSON -->
                                     <details class="raw-json-details">
                                         <summary>{{ t('module_template.ml.rawResponse') }}</summary>
                                         <pre class="raw-json">{{ JSON.stringify(prediction, null, 2) }}</pre>
                                     </details>
                                 </template>
 
-                                <!-- Подсказка для студентов -->
-                                <div class="ml-hint" v-if="modelMeta?.replace_hint">
-                                    <Lightbulb :size="13" />
+                                <div v-if="modelMeta?.replace_hint" class="ml-hint">
+                                    <Lightbulb :size="13" aria-hidden="true" />
                                     {{ modelMeta.replace_hint }}
                                 </div>
                             </div>
@@ -264,19 +275,23 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { computed, ref, watch } from 'vue'
 import {
     Activity, Database, Layers, Code,
     BookOpen, GitBranch, GraduationCap,
-    BrainCircuit, FileText, BarChart2, Lightbulb,
+    BrainCircuit, BarChart2, Lightbulb,
 } from 'lucide-vue-next'
 
 import ContentImage from '@/components/ContentImage.vue'
+import FormCard from '@/components/FormCard.vue'
+import FormField from '@/components/FormField.vue'
+import SelectBox from '@/components/SelectBox.vue'
+import SpinnerLoading from '@/components/SpinnerLoading.vue'
+import { useAppI18n } from '@/i18n/useAppI18n.js'
 import sdbLogo from '../assets/svg/sdb.svg'
 import { useModuleTemplateML } from '../js/useModuleTemplateML'
 
-const { t } = useI18n()
+const { t } = useAppI18n()
 
 const {
     loadingMeta,
@@ -286,6 +301,8 @@ const {
     prediction,
     sendPredict,
 } = useModuleTemplateML()
+
+const selectedExampleId = ref('')
 
 const features = computed(() => [
     {
@@ -345,9 +362,15 @@ const examples = computed(() => [
     },
 ])
 
-const applyExample = (text) => {
-    inputText.value = text
-}
+watch(selectedExampleId, (id) => {
+    if (!id) {
+        return
+    }
+    const example = examples.value.find((item) => item.id === id)
+    if (example) {
+        inputText.value = example.text
+    }
+})
 
 const categoryLabel = (cat) => {
     const key = `module_template.ml.categories.${cat}`
@@ -360,6 +383,12 @@ const priorityLabel = (pri) => {
     const label = t(key)
     return label === key ? pri : label
 }
+
+const priorityBadgeClass = (pri) => {
+    if (pri === 'high') return 'text-bg-danger'
+    if (pri === 'medium') return 'text-bg-warning'
+    return 'text-bg-secondary'
+}
 </script>
 
 <style lang="scss" scoped>
@@ -370,5 +399,19 @@ const priorityLabel = (pri) => {
   width: 72px;
   height: 72px;
   flex-shrink: 0;
+}
+
+.col-lg-5 :deep(.form-card) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.col-lg-5 :deep(.form-card__body) {
+  flex: 1 1 auto;
+}
+
+.col-lg-5 :deep(.select-box) {
+  --select-box-font-size: 0.875rem;
 }
 </style>

@@ -1,17 +1,18 @@
 <script setup>
 /**
  * Учебный блок CRUD TemplateItem на StatusPage.
- * Компоненты ядра: SearchInput, SelectBox, DataTable, LoadingContentArea, ModalCenter, confirm.
- * Состояние списка — useRouteQueryState (page / q / active в URL).
+ * Компоненты ядра: SearchInput, SelectBox, DataTable, DropDown, FormCard/FormField,
+ * LoadingContentArea, ModalCenter, confirm. Состояние списка — useRouteQueryState.
  */
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { Pencil, Plus, Trash2 } from 'lucide-vue-next'
+import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-vue-next'
 import DataTable from '@/components/DataTable.vue'
+import DropDown from '@/components/DropDown.vue'
 import LoadingContentArea from '@/components/LoadingContentArea.vue'
 import SearchInput from '@/components/SearchInput.vue'
 import SelectBox from '@/components/SelectBox.vue'
 import { useRouteQueryState } from '@/composables/useRouteQueryState.js'
+import { useAppI18n } from '@/i18n/useAppI18n.js'
 import { apiClient } from '@/js/api/manager'
 import { confirmDelete } from '@/js/utils/confirm.js'
 import { logError } from '@/js/utils/logError.js'
@@ -23,7 +24,7 @@ const TemplateItemModal = defineAsyncComponent(() =>
   import('./TemplateItemModal.vue'),
 )
 
-const { t } = useI18n()
+const { t } = useAppI18n()
 const toast = useToast()
 
 const isLoading = ref(false)
@@ -249,24 +250,39 @@ const deleteItem = async (item) => {
         </template>
         <template #cell-actions="{ item }">
           <div class="mt-items-demo__actions">
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-secondary"
-              :title="t('module_template.items.edit')"
-              :aria-label="t('module_template.items.edit')"
-              @click="openEditModal(item)"
-            >
-              <Pencil :size="14" />
-            </button>
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-danger"
-              :title="t('module_template.items.delete')"
-              :aria-label="t('module_template.items.delete')"
-              @click="deleteItem(item)"
-            >
-              <Trash2 :size="14" />
-            </button>
+            <DropDown dropdown-menu-class="dropdown-menu-end" compact>
+              <template #main>
+                <button
+                  type="button"
+                  class="btn btn-link p-0"
+                  :aria-label="t('module_template.items.actions')"
+                >
+                  <MoreHorizontal :size="18" />
+                </button>
+              </template>
+              <template #list>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    @click.prevent="openEditModal(item)"
+                  >
+                    <Pencil :size="16" />
+                    <span>{{ t('module_template.items.edit') }}</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item text-danger"
+                    href="#"
+                    @click.prevent="deleteItem(item)"
+                  >
+                    <Trash2 :size="16" />
+                    <span>{{ t('module_template.items.delete') }}</span>
+                  </a>
+                </li>
+              </template>
+            </DropDown>
           </div>
         </template>
       </DataTable>
@@ -318,23 +334,47 @@ const deleteItem = async (item) => {
 
 .mt-items-demo__toolbar {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 0.75rem;
+
+  // SearchInput по умолчанию width: 100% — без этого фильтр уезжает на вторую строку
+  :deep(.search-input) {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+  }
+
+  :deep(.select-box) {
+    --select-box-font-size: 0.875rem;
+  }
 }
 
 .mt-items-demo__filter {
   flex: 0 0 160px;
+  width: 160px;
   min-width: 140px;
 }
 
 .mt-items-demo__actions {
   display: inline-flex;
-  gap: 0.35rem;
   justify-content: flex-end;
 }
 
-.mt-items-demo__toolbar :deep(.select-box) {
-  --select-box-font-size: 0.875rem;
+@media (max-width: 767.98px) {
+  .mt-items-demo__toolbar {
+    flex-wrap: wrap;
+
+    :deep(.search-input) {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+  }
+
+  .mt-items-demo__filter {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+  }
 }
 </style>

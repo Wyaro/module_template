@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { useAppI18n } from '@/i18n/useAppI18n.js'
+import FormCard from '@/components/FormCard.vue'
+import FormField from '@/components/FormField.vue'
 import ModalCenter from '@/components/ModalCenter.vue'
 import { apiClient } from '@/js/api/manager'
 import { extractApiError } from '@/js/utils/apiErrorMessage.js'
@@ -16,7 +18,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'saved'])
 
-const { t } = useI18n()
+const { t } = useAppI18n()
 const toast = useToast()
 
 const formId = 'template-item-form'
@@ -111,49 +113,55 @@ const submit = async () => {
     :close-on-esc="!isSubmitting"
     @close="close"
   >
-    <form :id="formId" class="template-item-modal" @submit.prevent="submit">
-      <div class="mb-3">
-        <label class="form-label" for="template-item-name">
-          {{ t('module_template.items.name') }}
-        </label>
-        <input
-          id="template-item-name"
-          v-model="name"
-          type="text"
-          class="form-control"
-          maxlength="255"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <label class="form-label" for="template-item-description">
-          {{ t('module_template.items.descriptionCol') }}
-        </label>
-        <textarea
-          id="template-item-description"
-          v-model="description"
-          class="form-control"
-          rows="3"
-        />
-      </div>
-      <div class="form-check">
-        <input
-          id="template-item-active"
-          v-model="active"
-          class="form-check-input"
-          type="checkbox"
-        />
-        <label class="form-check-label" for="template-item-active">
-          {{ t('module_template.items.active') }}
-        </label>
-      </div>
-      <p v-if="error" class="text-danger small mt-3 mb-0">{{ error }}</p>
+    <form :id="formId" @submit.prevent="submit">
+      <FormCard>
+        <FormField
+          :label="t('module_template.items.name')"
+          label-for="template-item-name"
+          :error="error"
+        >
+          <input
+            id="template-item-name"
+            v-model="name"
+            type="text"
+            class="form-control form-control-sm"
+            :class="{ 'is-invalid': Boolean(error) }"
+            maxlength="255"
+            required
+          />
+        </FormField>
+        <FormField
+          :label="t('module_template.items.descriptionCol')"
+          label-for="template-item-description"
+          optional
+        >
+          <textarea
+            id="template-item-description"
+            v-model="description"
+            class="form-control form-control-sm"
+            rows="3"
+          />
+        </FormField>
+        <FormField
+          :label="t('module_template.items.active')"
+          label-for="template-item-active"
+          align="center"
+          last
+        >
+          <input
+            id="template-item-active"
+            v-model="active"
+            class="form-check-input"
+            type="checkbox"
+          />
+        </FormField>
+      </FormCard>
     </form>
 
     <template #footer>
       <button
         type="button"
-        class="btn btn-outline-secondary"
+        class="btn btn-outline-secondary btn-sm"
         :disabled="isSubmitting"
         @click="close"
       >
@@ -162,7 +170,7 @@ const submit = async () => {
       <button
         type="submit"
         :form="formId"
-        class="btn btn-primary"
+        class="btn btn-primary btn-sm"
         :disabled="isSubmitting"
       >
         {{ isSubmitting ? t('module_template.loading') : t('module_template.items.save') }}
