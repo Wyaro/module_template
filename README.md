@@ -17,8 +17,9 @@
 
 ```text
 modules/module_template/
+├── integrations.yaml          # requires / extends (зависимости модулей)
 ├── api/
-│   ├── apps.py                # AppConfig (ready → integrations; пример module_requires)
+│   ├── apps.py                # AppConfig (ready → integrations)
 │   ├── config.py
 │   ├── models.py              # TemplateItem (public_id)
 │   ├── serializers.py
