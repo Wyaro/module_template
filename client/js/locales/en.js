@@ -223,7 +223,6 @@ export default {
           'Interactive demos of core components. List and CRUD live on the Service status page.',
         statusDemoed: 'Demo ready',
         statusPlanned: 'Needs demo',
-        openDemo: 'Open demo',
         ruleLabel: 'Rule',
         fileLabel: 'File',
         checkHint: 'Coverage check: ergoms module_template:patterns-check',

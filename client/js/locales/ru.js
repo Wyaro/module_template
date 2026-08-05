@@ -223,7 +223,6 @@ export default {
           'Интерактивные примеры компонентов ядра. Список и CRUD — на странице «Статус сервиса».',
         statusDemoed: 'Есть демо',
         statusPlanned: 'Нужно добавить',
-        openDemo: 'Открыть демо',
         ruleLabel: 'Правило',
         fileLabel: 'Файл',
         checkHint: 'Проверка покрытия: ergoms module_template:patterns-check',

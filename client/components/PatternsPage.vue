@@ -3,7 +3,7 @@
  * Живой каталог паттернов ядра: реестр из core_patterns.json + песочница UI.
  */
 import { computed, ref } from 'vue'
-import { BookOpen, CheckCircle2, CircleDashed, ExternalLink } from 'lucide-vue-next'
+import { BookOpen, CheckCircle2, CircleDashed } from 'lucide-vue-next'
 import DecimalInput from '@/components/DecimalInput.vue'
 import FilterMenu from '@/components/FilterMenu.vue'
 import FormCard from '@/components/FormCard.vue'
@@ -132,14 +132,6 @@ const statusLabel = (status) =>
               <span>{{ t('module_template.patterns.fileLabel') }}: {{ item.demoFile }}</span>
             </div>
           </div>
-          <router-link
-            v-if="item.demoRoute"
-            :to="{ name: item.demoRoute }"
-            class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1"
-          >
-            <ExternalLink :size="14" />
-            {{ t('module_template.patterns.openDemo') }}
-          </router-link>
         </li>
       </ul>
     </section>
@@ -310,11 +302,6 @@ const statusLabel = (status) =>
 }
 
 .mt-patterns-catalog__item {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.75rem;
-  align-items: flex-start;
   padding: 0.9rem 1rem;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius, 0.5rem);

@@ -24,7 +24,7 @@
                     </span>
                     <span class="meta-pill meta-pill--accent">
                         <GitBranch :size="13" />
-                        v1.0
+                        v{{ systemVersion }}
                     </span>
                 </div>
             </div>
@@ -288,10 +288,12 @@ import FormField from '@/components/FormField.vue'
 import SelectBox from '@/components/SelectBox.vue'
 import SpinnerLoading from '@/components/SpinnerLoading.vue'
 import { useAppI18n } from '@/i18n/useAppI18n.js'
+import { clientEnv } from '@/js/clientEnv.js'
 import sdbLogo from '../assets/svg/sdb.svg'
 import { useModuleTemplateML } from '../js/useModuleTemplateML'
 
 const { t } = useAppI18n()
+const systemVersion = clientEnv.systemVersion
 
 const {
     loadingMeta,

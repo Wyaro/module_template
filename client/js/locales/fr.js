@@ -225,7 +225,6 @@ export default {
           'Démos interactives des composants du noyau. Liste et CRUD — page État du service.',
         statusDemoed: 'Démo prête',
         statusPlanned: 'À ajouter',
-        openDemo: 'Ouvrir la démo',
         ruleLabel: 'Règle',
         fileLabel: 'Fichier',
         checkHint: 'Vérification : ergoms module_template:patterns-check',
