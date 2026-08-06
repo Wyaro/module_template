@@ -5,7 +5,7 @@ class ModuleTemplateConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'modules.module_template.api'
     label = 'module_template'
-    verbose_name = 'Module Template'
+    verbose_name = 'Шаблон модуля'
     # Зависимости модулей — modules/module_template/integrations.yaml (requires / extends).
 
     def ready(self):
