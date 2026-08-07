@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-hidden="true">
+  <!-- 0@:0 CG51=>3> <>4C;O: :0@:0A H01;>=0 + H5AB5@=O accent (:0: ErgomsLogo). -->
+  <rect x="7" y="8" width="26" height="32" rx="5" stroke="currentColor" stroke-width="2"/>
+  <path d="M13 17h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M13 23h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M13 29h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <g stroke="var(--color-accent, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="34.5" cy="33.5" r="6.5"/>
+    <circle cx="34.5" cy="33.5" r="2.25"/>
+    <path d="M34.5 24.5v3.2"/>
+    <path d="M34.5 39.3v3.2"/>
+    <path d="M43.5 33.5h-3.2"/>
+    <path d="M28.7 33.5h-3.2"/>
+    <path d="M40.9 27.1l-2.3 2.3"/>
+    <path d="M30.4 37.6l-2.3 2.3"/>
+    <path d="M40.9 39.9l-2.3-2.3"/>
+    <path d="M30.4 29.4l-2.3-2.3"/>
+  </g>
+</svg>

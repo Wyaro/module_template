@@ -98,7 +98,7 @@ ergoms start-client
 | Status (метрики) | `LoadingContentArea` |
 | Status (список TemplateItem) | `SearchInput`, `SelectBox`, `DataTable`, `DropDown`, `LoadingContentArea`, `ModalCenter` + `FormCard`/`FormField`, `confirmDelete` |
 | Patterns | `FilterMenu`, `DecimalInput`, `FormCard`/`FormField`, toast, confirm, реестр `core_patterns.json` |
-| Main (ML) | `ContentImage`, toast, `logError`, `useAppI18n` |
+| Main (ML) | SVG-марка модуля, toast, `logError`, `useAppI18n` |
 | Lookup API | `public_id`, не pk БД |
 
 ---

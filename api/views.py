@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.db import connections
@@ -11,7 +12,7 @@ import time
 
 from src.config.version import get_system_version
 from src.core.audit.mixin import AuditedModelMixin
-from src.core.utils.mixins import SwaggerSafeMixin
+from src.core.utils.mixins import MediaApiFileMixin, SwaggerSafeMixin
 
 from .config import MODULE_DATABASE_ALIAS
 from .models import TemplateItem
@@ -40,9 +41,12 @@ def _demo_metrics() -> dict:
     }
 
 
-class TemplateItemViewSet(AuditedModelMixin, SwaggerSafeMixin, viewsets.ModelViewSet):
+class TemplateItemViewSet(MediaApiFileMixin, AuditedModelMixin, SwaggerSafeMixin, viewsets.ModelViewSet):
+    """CRUD TemplateItem + демо media_api (attachment_path / multipart)."""
+
     serializer_class = TemplateItemSerializer
     pagination_class = TemplateItemPagination
+    parser_classes = [JSONParser, MultiPartParser, FormParser]
     audit_module = 'module_template'
     audit_entity_type = 'templateitem'
     audit_action_map = {
@@ -64,10 +68,31 @@ class TemplateItemViewSet(AuditedModelMixin, SwaggerSafeMixin, viewsets.ModelVie
         active = self.request.query_params.get('active')
         if active is not None:
             queryset = queryset.filter(active=active.lower() == 'true')
-        search = (self.request.query_params.get('search') or '').strip()
+        # Канон search.mdc — параметр q (не legacy search).
+        search = (self.request.query_params.get('q') or '').strip()
         if search:
             queryset = queryset.filter(name__icontains=search)
         return queryset
+
+    def _assign_attachment(self, instance) -> None:
+        file, file_path = self.get_file_or_path('attachment')
+        if not file and not file_path:
+            return
+        MediaApiFileMixin.assign_file_field(
+            instance,
+            'attachment',
+            file=file,
+            file_path=file_path,
+        )
+        instance.save(update_fields=['attachment'])
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        self._assign_attachment(instance)
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        self._assign_attachment(instance)
 
 
 class HealthViewSet(viewsets.ViewSet):

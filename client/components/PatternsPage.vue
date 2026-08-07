@@ -1,9 +1,10 @@
 <script setup>
 /**
  * Живой каталог паттернов ядра: реестр из core_patterns.json + песочница UI.
+ * Оболочка страницы — admin-page / page-header / content-card (стандарт ядра).
  */
 import { computed, ref } from 'vue'
-import { BookOpen, CheckCircle2, CircleDashed } from 'lucide-vue-next'
+import { CheckCircle2, CircleDashed } from 'lucide-vue-next'
 import DecimalInput from '@/components/DecimalInput.vue'
 import FilterMenu from '@/components/FilterMenu.vue'
 import FormCard from '@/components/FormCard.vue'
@@ -88,26 +89,19 @@ const statusLabel = (status) =>
 </script>
 
 <template>
-  <div class="mt-patterns-page">
-    <header class="mt-patterns-page__header">
-      <div class="mt-patterns-page__title-row">
-        <div class="mt-patterns-page__icon" aria-hidden="true">
-          <BookOpen :size="20" />
-        </div>
-        <div>
-          <h1 class="mt-patterns-page__title">{{ t('module_template.patterns.title') }}</h1>
-          <p class="mt-patterns-page__subtitle">{{ t('module_template.patterns.subtitle') }}</p>
-        </div>
+  <div class="admin-page">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">{{ t('module_template.patterns.title') }}</h1>
+        <p class="page-subtitle">{{ t('module_template.patterns.subtitle') }}</p>
+        <p class="page-header__meta">
+          {{ demoedCount }} / {{ patterns.length }} · {{ t('module_template.patterns.checkHint') }}
+        </p>
       </div>
-      <p class="mt-patterns-page__meta">
-        {{ demoedCount }} / {{ patterns.length }} · {{ t('module_template.patterns.checkHint') }}
-      </p>
-    </header>
+    </div>
 
-    <section class="mt-patterns-page__section" aria-labelledby="mt-patterns-catalog">
-      <h2 id="mt-patterns-catalog" class="mt-patterns-page__heading">
-        {{ t('module_template.patterns.catalogHeading') }}
-      </h2>
+    <div class="content-card">
+      <h2 class="section-heading">{{ t('module_template.patterns.catalogHeading') }}</h2>
       <ul class="mt-patterns-catalog">
         <li
           v-for="item in patterns"
@@ -134,16 +128,14 @@ const statusLabel = (status) =>
           </div>
         </li>
       </ul>
-    </section>
+    </div>
 
-    <section class="mt-patterns-page__section" aria-labelledby="mt-patterns-playground">
-      <h2 id="mt-patterns-playground" class="mt-patterns-page__heading">
-        {{ t('module_template.patterns.playgroundHeading') }}
-      </h2>
-      <p class="mt-patterns-page__hint">{{ t('module_template.patterns.playgroundHint') }}</p>
+    <div class="content-card">
+      <h2 class="section-heading">{{ t('module_template.patterns.playgroundHeading') }}</h2>
+      <p class="mt-patterns-playground__hint">{{ t('module_template.patterns.playgroundHint') }}</p>
 
-      <div class="mt-patterns-playground">
-        <div class="mt-patterns-playground__toolbar">
+      <div class="table-header">
+        <div class="actions-wrapper">
           <FilterMenu
             v-model="filters"
             :fields="filterFields"
@@ -153,144 +145,79 @@ const statusLabel = (status) =>
           />
           <button
             type="button"
-            class="btn btn-sm btn-outline-secondary"
+            class="ui-btn ui-btn--secondary"
             @click="showToastDemo"
           >
             {{ t('module_template.patterns.toastDemo') }}
           </button>
           <button
             type="button"
-            class="btn btn-sm btn-outline-secondary"
+            class="ui-btn ui-btn--secondary"
             @click="showConfirmDemo"
           >
             {{ t('module_template.patterns.confirmDemo') }}
           </button>
         </div>
-
-        <FormCard>
-          <FormField
-            :label="t('module_template.patterns.formName')"
-            label-for="mt-pattern-name"
-          >
-            <input
-              id="mt-pattern-name"
-              v-model="formName"
-              type="text"
-              class="form-control form-control-sm"
-            />
-          </FormField>
-          <FormField
-            :label="t('module_template.patterns.formScore')"
-            label-for="mt-pattern-score"
-            :hint="t('module_template.patterns.decimalHint')"
-          >
-            <DecimalInput
-              id="mt-pattern-score"
-              v-model="decimalValue"
-              input-class="form-control-sm"
-              :aria-label="t('module_template.patterns.decimalLabel')"
-              :show-steppers="true"
-              :step="0.5"
-            />
-          </FormField>
-          <FormField
-            :label="t('module_template.patterns.formOptional')"
-            label-for="mt-pattern-note"
-            optional
-          >
-            <input
-              id="mt-pattern-note"
-              v-model="formNote"
-              type="text"
-              class="form-control form-control-sm"
-            />
-          </FormField>
-          <FormField
-            :label="t('module_template.patterns.formActive')"
-            label-for="mt-pattern-active"
-            align="center"
-            last
-          >
-            <input
-              id="mt-pattern-active"
-              v-model="formActive"
-              class="form-check-input"
-              type="checkbox"
-            />
-          </FormField>
-        </FormCard>
       </div>
-    </section>
+
+      <FormCard>
+        <FormField
+          :label="t('module_template.patterns.formName')"
+          label-for="mt-pattern-name"
+        >
+          <input
+            id="mt-pattern-name"
+            v-model="formName"
+            type="text"
+            class="form-control form-control-sm"
+          />
+        </FormField>
+        <FormField
+          :label="t('module_template.patterns.formScore')"
+          label-for="mt-pattern-score"
+          :hint="t('module_template.patterns.decimalHint')"
+        >
+          <DecimalInput
+            id="mt-pattern-score"
+            v-model="decimalValue"
+            input-class="form-control-sm"
+            :aria-label="t('module_template.patterns.decimalLabel')"
+            :show-steppers="true"
+            :step="0.5"
+          />
+        </FormField>
+        <FormField
+          :label="t('module_template.patterns.formOptional')"
+          label-for="mt-pattern-note"
+          optional
+        >
+          <input
+            id="mt-pattern-note"
+            v-model="formNote"
+            type="text"
+            class="form-control form-control-sm"
+          />
+        </FormField>
+        <FormField
+          :label="t('module_template.patterns.formActive')"
+          label-for="mt-pattern-active"
+          align="center"
+          last
+        >
+          <input
+            id="mt-pattern-active"
+            v-model="formActive"
+            class="form-check-input"
+            type="checkbox"
+          />
+        </FormField>
+      </FormCard>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.mt-patterns-page {
-  padding: 24px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.mt-patterns-page__header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.mt-patterns-page__title-row {
-  display: flex;
-  gap: 0.875rem;
-  align-items: flex-start;
-}
-
-.mt-patterns-page__icon {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--ui-pill);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--ui-accent-soft);
-  color: var(--ui-accent);
-  flex-shrink: 0;
-}
-
-.mt-patterns-page__title {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--ui-text);
-}
-
-.mt-patterns-page__subtitle {
-  margin: 0.25rem 0 0;
-  font-size: 0.85rem;
-  color: var(--ui-text-muted);
-  max-width: 42rem;
-}
-
-.mt-patterns-page__meta {
-  margin: 0;
-  font-size: 0.78rem;
-  color: var(--ui-text-muted);
-}
-
-.mt-patterns-page__heading {
-  margin: 0 0 0.75rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--ui-text);
-}
-
-.mt-patterns-page__hint {
-  margin: 0 0 0.75rem;
-  font-size: 0.85rem;
-  color: var(--ui-text-muted);
-}
+@import '../scss/page-shell.scss';
 
 .mt-patterns-catalog {
   list-style: none;
@@ -305,7 +232,7 @@ const statusLabel = (status) =>
   padding: 0.9rem 1rem;
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius, 0.5rem);
-  background: var(--ui-surface);
+  background: var(--ui-surface-2);
 }
 
 .mt-patterns-catalog__title {
@@ -347,31 +274,15 @@ const statusLabel = (status) =>
   }
 
   &--planned {
-    background: var(--ui-surface-2);
+    background: var(--ui-surface);
     color: var(--ui-text-muted);
+    border: 1px solid var(--ui-border);
   }
 }
 
-.mt-patterns-playground {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--ui-border);
-  border-radius: var(--ui-radius, 0.5rem);
-  background: var(--ui-surface);
-}
-
-.mt-patterns-playground__toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-@media (max-width: 767.98px) {
-  .mt-patterns-page {
-    padding: 16px;
-  }
+.mt-patterns-playground__hint {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ui-text-muted);
 }
 </style>

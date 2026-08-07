@@ -3,7 +3,7 @@ export default {
     module_template: {
       title: 'Шаблон модуля',
       subtitle: 'Учебный шаблон для разработки модулей в системе ERGO MS · СКБ',
-      logoAlt: 'СКБ',
+      logoAlt: 'Шаблон модуля',
       aboutHeading: 'О шаблонном модуле',
       aboutText:
         'Модуль демонстрирует архитектурные соглашения ERGO MS: структуру API, работу с базой данных, подключение очередей задач и интеграцию ML-сервисов. Используйте его как отправную точку для собственных модулей.',
@@ -193,6 +193,11 @@ export default {
         name: 'Название',
         nameRequired: 'Укажите название элемента.',
         descriptionCol: 'Описание',
+        attachment: 'Вложение',
+        attachmentCurrent: 'Текущий файл: {name}',
+        attachmentDownload: 'Скачать вложение',
+        attachmentDownloadError: 'Не удалось скачать файл',
+        attachmentUploadFail: 'Не удалось загрузить файл в media_api',
         active: 'Активен',
         inactive: 'Неактивен',
         status: 'Статус',
@@ -244,6 +249,10 @@ export default {
         confirmMessage: 'Это демо confirm.js из ядра. Продолжить?',
         applyFilters: 'Фильтры применены',
         items: {
+          pageShell: {
+            title: 'Оболочка страницы',
+            desc: 'admin-page → page-header → content-card на токенах --ui-* (как Groups/Users в ядре).',
+          },
           selectBox: {
             title: 'SelectBox',
             desc: 'Единственный выпадающий список для выбора значения.',
@@ -299,6 +308,10 @@ export default {
           bridge: {
             title: 'ModuleBridge',
             desc: 'Аудит, layout plugins и platform-контракты без прямых импортов.',
+          },
+          mediaApi: {
+            title: 'media_api',
+            desc: 'Загрузка через mediaApiClient и attachment_path; скачивание по signed URL.',
           },
         },
       },

@@ -5,11 +5,17 @@ import FormCard from '@/components/FormCard.vue'
 import FormField from '@/components/FormField.vue'
 import ModalCenter from '@/components/ModalCenter.vue'
 import { apiClient } from '@/js/api/manager'
+import { mediaApiClient } from '@/js/api/media-api-client.js'
+import { buildMediaUploadOptions } from '@/js/mediaUploadLimits.js'
 import { extractApiError } from '@/js/utils/apiErrorMessage.js'
 import { logError } from '@/js/utils/logError.js'
 import { useToast } from '@/js/utils/toast.js'
 
 import { moduleTemplateEndpoints } from '../js/endpoints'
+
+const ATTACHMENT_UPLOAD_OPTIONS = buildMediaUploadOptions({
+  targetDir: 'module_template/attachments/',
+})
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
@@ -25,6 +31,8 @@ const formId = 'template-item-form'
 const name = ref('')
 const description = ref('')
 const active = ref(true)
+const attachmentFile = ref(null)
+const existingAttachmentName = ref('')
 const error = ref('')
 const isSubmitting = ref(false)
 
@@ -41,7 +49,14 @@ const resetForm = () => {
   name.value = props.item?.name || ''
   description.value = props.item?.description || ''
   active.value = props.item?.active ?? true
+  attachmentFile.value = null
+  existingAttachmentName.value = props.item?.attachment_name || ''
   error.value = ''
+}
+
+const onAttachmentChange = (event) => {
+  const files = event?.target?.files
+  attachmentFile.value = files && files.length ? files[0] : null
 }
 
 watch(
@@ -76,6 +91,18 @@ const submit = async () => {
   }
 
   try {
+    if (attachmentFile.value) {
+      const uploaded = await mediaApiClient.upload(
+        attachmentFile.value,
+        ATTACHMENT_UPLOAD_OPTIONS,
+      )
+      if (!uploaded?.path) {
+        error.value = t('module_template.items.attachmentUploadFail')
+        return
+      }
+      payload.attachment_path = uploaded.path
+    }
+
     let response
     if (isEdit.value) {
       response = await apiClient.put(`${itemsUrl}${props.item.public_id}/`, payload)
@@ -143,6 +170,25 @@ const submit = async () => {
           />
         </FormField>
         <FormField
+          :label="t('module_template.items.attachment')"
+          label-for="template-item-attachment"
+          optional
+        >
+          <input
+            id="template-item-attachment"
+            type="file"
+            class="form-control form-control-sm"
+            :disabled="isSubmitting"
+            @change="onAttachmentChange"
+          />
+          <small
+            v-if="existingAttachmentName && !attachmentFile"
+            class="text-muted d-block mt-1"
+          >
+            {{ t('module_template.items.attachmentCurrent', { name: existingAttachmentName }) }}
+          </small>
+        </FormField>
+        <FormField
           :label="t('module_template.items.active')"
           label-for="template-item-active"
           align="center"
@@ -161,7 +207,7 @@ const submit = async () => {
     <template #footer>
       <button
         type="button"
-        class="btn btn-outline-secondary btn-sm"
+        class="ui-btn ui-btn--secondary"
         :disabled="isSubmitting"
         @click="close"
       >
@@ -170,7 +216,7 @@ const submit = async () => {
       <button
         type="submit"
         :form="formId"
-        class="btn btn-primary btn-sm"
+        class="ui-btn ui-btn--primary"
         :disabled="isSubmitting"
       >
         {{ isSubmitting ? t('module_template.loading') : t('module_template.items.save') }}

@@ -5,7 +5,7 @@
  * LoadingContentArea, ModalCenter, confirm. Состояние списка — useRouteQueryState.
  */
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
-import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-vue-next'
+import { Download, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-vue-next'
 import DataTable from '@/components/DataTable.vue'
 import DropDown from '@/components/DropDown.vue'
 import LoadingContentArea from '@/components/LoadingContentArea.vue'
@@ -15,6 +15,7 @@ import { useRouteQueryState } from '@/composables/useRouteQueryState.js'
 import { useAppI18n } from '@/i18n/useAppI18n.js'
 import { apiClient } from '@/js/api/manager'
 import { confirmDelete } from '@/js/utils/confirm.js'
+import { downloadMedia } from '@/js/utils/mediaDownload.js'
 import { logError } from '@/js/utils/logError.js'
 import { useToast } from '@/js/utils/toast.js'
 
@@ -60,6 +61,11 @@ const columns = computed(() => [
   { key: 'name', label: t('module_template.items.name') },
   { key: 'description', label: t('module_template.items.descriptionCol'), hideBelow: 'md' },
   {
+    key: 'attachment',
+    label: t('module_template.items.attachment'),
+    hideBelow: 'md',
+  },
+  {
     key: 'active',
     label: t('module_template.items.status'),
     headerStyle: { textAlign: 'center' },
@@ -92,7 +98,7 @@ const loadItems = async () => {
       page_size: rowsPerPage.value,
     }
     if (searchQuery.value.trim()) {
-      params.search = searchQuery.value.trim()
+      params.q = searchQuery.value.trim()
     }
     if (activeFilter.value !== 'all') {
       params.active = activeFilter.value
@@ -183,24 +189,38 @@ const deleteItem = async (item) => {
     toast.error(t('module_template.items.deleteError'))
   }
 }
+
+const downloadAttachment = async (item) => {
+  if (!item?.attachment_url) {
+    return
+  }
+  try {
+    await downloadMedia(item.attachment_url, { filename: item.attachment_name || undefined })
+  } catch (error) {
+    logError('TemplateItemsDemo.downloadAttachment', error)
+    toast.error(t('module_template.items.attachmentDownloadError'))
+  }
+}
 </script>
 
 <template>
-  <section class="mt-items-demo">
-    <header class="mt-items-demo__header">
+  <section class="content-card mt-items-demo">
+    <div class="table-header">
       <div>
-        <h2 class="mt-items-demo__title">{{ t('module_template.items.title') }}</h2>
+        <h2 class="section-heading">{{ t('module_template.items.title') }}</h2>
         <p class="mt-items-demo__subtitle">{{ t('module_template.items.description') }}</p>
       </div>
-      <button
-        type="button"
-        class="btn btn-primary btn-sm d-inline-flex align-items-center gap-2"
-        @click="openCreateModal"
-      >
-        <Plus :size="14" />
-        {{ t('module_template.items.create') }}
-      </button>
-    </header>
+      <div class="actions-wrapper">
+        <button
+          type="button"
+          class="ui-btn ui-btn--primary"
+          @click="openCreateModal"
+        >
+          <Plus :size="16" />
+          <span>{{ t('module_template.items.create') }}</span>
+        </button>
+      </div>
+    </div>
 
     <div class="mt-items-demo__toolbar">
       <SearchInput
@@ -240,6 +260,19 @@ const deleteItem = async (item) => {
         <template #cell-description="{ item }">
           <span class="text-muted">{{ item.description || '—' }}</span>
         </template>
+        <template #cell-attachment="{ item }">
+          <button
+            v-if="item.attachment_url"
+            type="button"
+            class="btn btn-link btn-sm p-0 d-inline-flex align-items-center gap-1"
+            :aria-label="t('module_template.items.attachmentDownload')"
+            @click="downloadAttachment(item)"
+          >
+            <Download :size="14" />
+            <span>{{ item.attachment_name || t('module_template.items.attachment') }}</span>
+          </button>
+          <span v-else class="text-muted">—</span>
+        </template>
         <template #cell-active="{ item }">
           <span
             class="badge"
@@ -249,7 +282,7 @@ const deleteItem = async (item) => {
           </span>
         </template>
         <template #cell-actions="{ item }">
-          <div class="mt-items-demo__actions">
+          <div class="actions-cell">
             <DropDown dropdown-menu-class="dropdown-menu-end" compact>
               <template #main>
                 <button
@@ -299,36 +332,12 @@ const deleteItem = async (item) => {
 </template>
 
 <style scoped lang="scss">
-.mt-items-demo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: var(--ui-radius, 0.5rem);
-  background: var(--ui-surface, var(--bs-body-bg));
-  border: 1px solid var(--ui-border, var(--bs-border-color));
-}
-
-.mt-items-demo__header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.mt-items-demo__title {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--ui-text, var(--bs-body-color));
-}
+@import '../scss/page-shell.scss';
 
 .mt-items-demo__subtitle {
   margin: 0.25rem 0 0;
-  color: var(--ui-text-muted, var(--bs-secondary-color));
-  font-size: 0.85rem;
+  color: var(--ui-text-muted);
+  font-size: 0.875rem;
   max-width: 36rem;
 }
 
@@ -354,11 +363,6 @@ const deleteItem = async (item) => {
   flex: 0 0 160px;
   width: 160px;
   min-width: 140px;
-}
-
-.mt-items-demo__actions {
-  display: inline-flex;
-  justify-content: flex-end;
 }
 
 @media (max-width: 767.98px) {

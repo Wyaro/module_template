@@ -3,7 +3,7 @@ export default {
     module_template: {
       title: 'Module template',
       subtitle: 'Learning template for building modules in ERGO MS · SKB',
-      logoAlt: 'SKB',
+      logoAlt: 'Module template',
       aboutHeading: 'About the template module',
       aboutText:
         'This module demonstrates ERGO MS architecture conventions: API structure, database usage, task queues, and ML service integration. Use it as a starting point for your own modules.',
@@ -193,6 +193,11 @@ export default {
         name: 'Name',
         nameRequired: 'Enter an item name.',
         descriptionCol: 'Description',
+        attachment: 'Attachment',
+        attachmentCurrent: 'Current file: {name}',
+        attachmentDownload: 'Download attachment',
+        attachmentDownloadError: 'Failed to download the file',
+        attachmentUploadFail: 'Failed to upload the file to media_api',
         active: 'Active',
         inactive: 'Inactive',
         status: 'Status',
@@ -244,6 +249,10 @@ export default {
         confirmMessage: 'This is a confirm.js demo from the core. Continue?',
         applyFilters: 'Filters applied',
         items: {
+          pageShell: {
+            title: 'Page shell',
+            desc: 'admin-page → page-header → content-card on --ui-* tokens (same as core Groups/Users).',
+          },
           selectBox: {
             title: 'SelectBox',
             desc: 'The only dropdown for picking a value.',
@@ -299,6 +308,10 @@ export default {
           bridge: {
             title: 'ModuleBridge',
             desc: 'Audit, layout plugins, and platform contracts without direct imports.',
+          },
+          mediaApi: {
+            title: 'media_api',
+            desc: 'Upload via mediaApiClient and attachment_path; download with a signed URL.',
           },
         },
       },

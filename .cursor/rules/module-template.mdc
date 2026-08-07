@@ -18,6 +18,8 @@ alwaysApply: false
 - Мост: `api/integrations.py`, `client/js/integrations.js`
 - Живой каталог паттернов: `client/js/core_patterns.json` + `PatternsPage.vue`
 - Список/CRUD UI: `SelectBox`, `SearchInput`, `DataTable`, `DropDown`, `FormCard`/`FormField`, `ModalCenter`, `LoadingContentArea`
+- Кнопки действий: `ui-btn ui-btn--primary` / `ui-btn--secondary` (не Bootstrap `btn btn-primary`)
+- Оболочка страниц: `admin-page` → `page-header` (`page-title` / `page-subtitle`) → `content-card` (порт ядра на `--ui-*`)
 - Команды: `ergoms module_template:…`
 
 ## Обязательно
@@ -25,6 +27,7 @@ alwaysApply: false
 - Внешние идентификаторы — `public_id` (UUID), не pk БД в URL и storage
 - Выпадающие списки — только `SelectBox`; меню действий строки — `DropDown`
 - Формы в модалках — `FormCard` + `FormField`
+- Страницы модуля — каркас из `client/scss/page-shell.scss` (как Groups/Users в ядре)
 - i18n в компонентах — `useAppI18n()`
 - Каталоги — `client/js/locales/{ru,en,fr}.js`, facade в `locales.js`
 - List-фильтры CRUD — `useRouteQueryState` (`page` / `q` / `active`)
@@ -35,6 +38,7 @@ alwaysApply: false
 
 - Прямой import домена этого модуля из `core/`
 - Свой `<select>` / самодельная пагинация bootstrap вместо компонентов ядра
+- Свой page-shell с `padding: 24px` и icon-pill у заголовка вместо `page-header`
 - Секреты и токены в коде модуля
 - `status: "demoed"` без реального файла демо
 
@@ -43,6 +47,7 @@ alwaysApply: false
 | Тема | Файл |
 |------|------|
 | Живой шаблон / обязанность демо | `module-template-living.mdc` |
+| Оболочка страниц | `client/scss/page-shell.scss`, эталон ядра `admin-page.scss` |
 | Каталог паттернов | `client/js/core_patterns.json`, `PatternsPage.vue` |
 | CRUD + UI | `client/components/TemplateItemsDemo.vue` |
 | ML-демо | `api/ml_service.py`, `useModuleTemplateML.js` |

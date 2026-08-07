@@ -3,7 +3,7 @@ export default {
     module_template: {
       title: 'Modèle de module',
       subtitle: 'Modèle pédagogique pour créer des modules dans ERGO MS · SKB',
-      logoAlt: 'SKB',
+      logoAlt: 'Modèle de module',
       aboutHeading: 'À propos du module modèle',
       aboutText:
         "Ce module présente les conventions d'architecture ERGO MS : structure de l'API, utilisation de la base de données, files de tâches et intégration de services ML. Utilisez-le comme point de départ pour vos propres modules.",
@@ -195,6 +195,11 @@ export default {
         name: 'Nom',
         nameRequired: 'Indiquez un nom d’élément.',
         descriptionCol: 'Description',
+        attachment: 'Pièce jointe',
+        attachmentCurrent: 'Fichier actuel : {name}',
+        attachmentDownload: 'Télécharger la pièce jointe',
+        attachmentDownloadError: 'Échec du téléchargement du fichier',
+        attachmentUploadFail: 'Échec du téléversement vers media_api',
         active: 'Actif',
         inactive: 'Inactif',
         status: 'Statut',
@@ -246,6 +251,10 @@ export default {
         confirmMessage: 'Démo de confirm.js du noyau. Continuer ?',
         applyFilters: 'Filtres appliqués',
         items: {
+          pageShell: {
+            title: 'Enveloppe de page',
+            desc: 'admin-page → page-header → content-card avec jetons --ui-* (comme Groups/Users du noyau).',
+          },
           selectBox: {
             title: 'SelectBox',
             desc: 'Seul sélecteur pour choisir une valeur.',
@@ -301,6 +310,10 @@ export default {
           bridge: {
             title: 'ModuleBridge',
             desc: 'Audit, plugins layout et contrats plateforme sans imports directs.',
+          },
+          mediaApi: {
+            title: 'media_api',
+            desc: 'Téléversement via mediaApiClient et attachment_path ; téléchargement par URL signée.',
           },
         },
       },

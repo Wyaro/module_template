@@ -2,6 +2,16 @@
   "$schema_comment": "Источник истины каталога эталонов module_template. UI и patterns-check читают этот файл.",
   "patterns": [
     {
+      "id": "page-shell",
+      "category": "ui",
+      "titleKey": "module_template.patterns.items.pageShell.title",
+      "descKey": "module_template.patterns.items.pageShell.desc",
+      "rule": "client_code.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplatePatterns",
+      "demoFile": "client/scss/page-shell.scss"
+    },
+    {
       "id": "select-box",
       "category": "ui",
       "titleKey": "module_template.patterns.items.selectBox.title",
@@ -140,6 +150,16 @@
       "status": "demoed",
       "demoRoute": "ModuleTemplateMain",
       "demoFile": "api/integrations.py"
+    },
+    {
+      "id": "media-api",
+      "category": "api",
+      "titleKey": "module_template.patterns.items.mediaApi.title",
+      "descKey": "module_template.patterns.items.mediaApi.desc",
+      "rule": "media_api.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateStatus",
+      "demoFile": "client/components/TemplateItemModal.vue"
     }
   ]
 }
