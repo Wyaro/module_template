@@ -31,6 +31,7 @@
 
 - Список TemplateItem — параметр поиска `q`
 - Вложение TemplateItem — upload через `mediaApiClient`, API поле `attachment_path`, скачивание по signed URL
+- Эталон пользовательской справки для RAG ai_assistant — `api/user_guides/*.md` и `user_description` в `permission_catalog.py`
 
 ## Команды
 
