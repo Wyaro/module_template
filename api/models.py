@@ -1,10 +1,9 @@
-from uuid import uuid4
-
 from django.db import models
 
+from src.core.utils.base.models import PublicIdMixin
 
-class TemplateItem(models.Model):
-    public_id = models.UUIDField(default=uuid4, unique=True, editable=False, db_index=True)
+
+class TemplateItem(PublicIdMixin, models.Model):
     name = models.CharField(max_length=255, default='Без названия', blank=True, unique=True)
     description = models.TextField(blank=True)
     active = models.BooleanField(default=True)

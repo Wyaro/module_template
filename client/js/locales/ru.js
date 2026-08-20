@@ -305,6 +305,10 @@ export default {
             title: 'public_id',
             desc: 'Внешние идентификаторы UUID, не pk БД в URL.',
           },
+          baseViewSet: {
+            title: 'BaseModelViewSet',
+            desc: 'CRUD сразу с JWT, Swagger-safe и lookup по public_id.',
+          },
           bridge: {
             title: 'ModuleBridge',
             desc: 'Аудит, layout plugins и platform-контракты без прямых импортов.',

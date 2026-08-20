@@ -20,10 +20,9 @@ env/
 ENV/
 
 # Локальные настройки и секреты
-*.env
+.env
 .env.*
-!example.env
-!env.example
+!.env.example
 
 # Бэкапы БД и артефакты
 *.sqlite3

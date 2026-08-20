@@ -31,7 +31,11 @@
 
 - Список TemplateItem — параметр поиска `q`
 - Вложение TemplateItem — upload через `mediaApiClient`, API поле `attachment_path`, скачивание по signed URL
+- Квота загрузок — `MEDIA_UPLOAD_QUOTA_POLICIES_GROUP` в `api/integrations.py`, ключ `MODULE_TEMPLATE_UPLOAD_RATE` в `.env.example`
 - Эталон пользовательской справки для RAG ai_assistant — `api/user_guides/*.md` и `user_description` в `permission_catalog.py`
+- Эталон footprint Celery — `task_footprint.yaml` (для `ergoms celery-balance`)
+- Эталон выноса процесса — `api/bridge_manifest.yaml`, `api/schema.yaml`, `host_lifecycle.yaml`
+- CRUD API — `BaseModelViewSet` + `PublicIdMixin` (`api/views.py`, `api/models.py`)
 
 ## Команды
 

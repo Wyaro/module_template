@@ -13,7 +13,7 @@ alwaysApply: false
 
 ## Кратко
 
-- API: `api/` (`apps.py`, ViewSet + permissions, `public_id` в URL)
+- API: `api/` (`apps.py`, `BaseModelViewSet` + permissions, `PublicIdMixin`)
 - Клиент: `client/js/` (`routes.js`, `endpoints.js`, `locales.js`, `permission-rules.js`)
 - Мост: `api/integrations.py`, `client/js/integrations.js`
 - Живой каталог паттернов: `client/js/core_patterns.json` + `PatternsPage.vue`
@@ -24,7 +24,7 @@ alwaysApply: false
 
 ## Обязательно
 
-- Внешние идентификаторы — `public_id` (UUID), не pk БД в URL и storage
+- Внешние идентификаторы — `PublicIdMixin` / `public_id` (UUID), не pk БД в URL и storage
 - Выпадающие списки — только `SelectBox`; меню действий строки — `DropDown`
 - Формы в модалках — `FormCard` + `FormField`
 - Страницы модуля — каркас из `client/scss/page-shell.scss` (как Groups/Users в ядре)
@@ -49,7 +49,8 @@ alwaysApply: false
 | Живой шаблон / обязанность демо | `module-template-living.mdc` |
 | Оболочка страниц | `client/scss/page-shell.scss`, эталон ядра `admin-page.scss` |
 | Каталог паттернов | `client/js/core_patterns.json`, `PatternsPage.vue` |
+| CRUD API | `api/views.py` (`BaseModelViewSet`), `api/models.py` (`PublicIdMixin`) |
 | CRUD + UI | `client/components/TemplateItemsDemo.vue` |
 | ML-демо | `api/ml_service.py`, `useModuleTemplateML.js` |
-| Мост / audit | `api/integrations.py` |
+| Мост / audit / квота загрузок | `api/integrations.py`, `.env.example` |
 | Сценарии | `HOWTO.md` |

@@ -4,7 +4,7 @@
  * Оболочка страницы — admin-page / page-header / content-card (стандарт ядра).
  */
 import { computed, ref } from 'vue'
-import { CheckCircle2, CircleDashed } from 'lucide-vue-next'
+import { CheckCircle2, CircleDashed } from '@lucide/vue'
 import DecimalInput from '@/components/DecimalInput.vue'
 import FilterMenu from '@/components/FilterMenu.vue'
 import FormCard from '@/components/FormCard.vue'

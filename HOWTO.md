@@ -65,7 +65,7 @@
 ## 4. Права и аудит
 
 1. Ключ права — `api/permissions.py` / `permission_catalog.py`.
-2. ViewSet — `permission_classes = [IsAuthenticated, CanViewModuleTemplate, ...]`.
+2. ViewSet — `BaseModelViewSet` / `BaseViewSet`, `permission_classes = [IsAuthenticated, CanViewModuleTemplate, ...]`.
 3. CRUD с журналом — `AuditedModelMixin` + `AUDIT_ACTION_DEFINITIONS_GROUP`.
 4. UX-guard — `permission-rules.js` с `titleKey` / `messageKey`.
 
@@ -79,7 +79,7 @@
 
 | Контракт | Файл |
 |----------|------|
-| `audit.action_definitions`, `core.user_delete` | [`api/integrations.py`](api/integrations.py) |
+| `audit.action_definitions`, `core.user_delete`, `media.upload_quota_policies` | [`api/integrations.py`](api/integrations.py) |
 | `layout.plugin_registry` | [`client/js/integrations.js`](client/js/integrations.js) |
 | stub session-scope (закомментирован) | те же integrations |
 | `routeGuard` (passthrough) | [`client/js/routeGuard.js`](client/js/routeGuard.js) |
@@ -88,6 +88,8 @@
 Session-scoped UI регистрирует владелец scope `<host_module>` (`SESSION_CLAIMS_GROUP` и клиентские группы). Эталон guard: `modules/<host_module>/client/js/*Guard.js`.
 
 Межмодульные группы **не** кладите в каталог ядра. Platform-константы импортируйте из каталога ядра.
+
+Квота загрузок: `provide_many(MEDIA_UPLOAD_QUOTA_POLICIES_GROUP, …)` в [`api/integrations.py`](api/integrations.py), частота — `MODULE_TEMPLATE_UPLOAD_RATE` в [`.env.example`](.env.example). Следующий модуль копирует этот шаблон.
 
 ---
 
@@ -106,7 +108,10 @@ ergoms start-worker
 Доменные инструкции агента:
 
 - `.cursor/rules/*.mdc` — с `globs: modules/module_template/**`
-- `AGENTS.md` — короткий fallback без расширения
+- `AGENTS.md` — короткий fallback без расширения (обязателен в каждом модуле)
+- `README.md` — обзор для человека (обязателен в каждом модуле)
+
+При копировании шаблона переименуйте оба файла под новый модуль: заголовок, зависимости, команды `ergoms <name>:…`.
 
 После добавления или правки `.mdc`: расширение **ERGO MS Module Cursor Rules** синхронизирует staging само (или команда **ERGO MS: Sync Module Cursor Rules**). Установка: `ergoms install-extensions`.
 
@@ -121,3 +126,27 @@ ergoms dev
 ergoms start-client
 ergoms help module module_template
 ```
+
+---
+
+## 9. Footprint задач для балансировщика Celery
+
+Эталон: [`task_footprint.yaml`](task_footprint.yaml). Ядро читает файл через hook discovery (`ergoms celery-balance`), без импорта `api/` модуля.
+
+1. Скопируйте YAML в новый модуль и замените очередь/`pattern` на свои.
+2. Для тяжёлых задач укажите `class: heavy`, `ram_mb`, `max_parallel`; для GPU — `gpu_required`, `vram_mb` и при необходимости `cpu_fallback: false` (без устройства очередь ставится на паузу).
+3. Проверка отчёта: `ergoms celery-balance --dry-run`.
+
+---
+
+## 10. Вынос модуля в отдельный сервис
+
+Живой эталон файлов уровня 1–2. Подробности — [`.docs/modularization.md`](../../.docs/modularization.md).
+
+1. `api/bridge_manifest.yaml` — владелец ops/groups для HTTP-моста.
+2. `api/schema.yaml` — схема `m_<name>`, `isolated: true` (нет FK на пользователя ядра).
+3. `host_lifecycle.yaml` / `process_roles.yaml` — OS-службы через `ergoms install-module-service`.
+4. Проверка инфраструктуры: `MODULE_RUNTIME=microservice`, `MICROSERVICE_MODULES=module_template`, `ergoms start-module --module=module_template`.
+5. Очередь Celery уже `module_template`; worker: `ergoms start-worker --module=module_template`.
+6. Разработка по умолчанию остаётся монолитом (`MODULE_RUNTIME=monolith`).
+

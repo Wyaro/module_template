@@ -344,7 +344,7 @@ import {
     Activity, RefreshCw, CheckCircle, XCircle, Database,
     Clock, Server, Zap, AlertTriangle, TrendingUp,
     BarChart2, List, Info,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 import LoadingContentArea from '@/components/LoadingContentArea.vue'
 import { useAppI18n } from '@/i18n/useAppI18n.js'

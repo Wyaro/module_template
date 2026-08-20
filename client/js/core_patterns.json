@@ -142,6 +142,16 @@
       "demoFile": "api/models.py"
     },
     {
+      "id": "base-viewset",
+      "category": "api",
+      "titleKey": "module_template.patterns.items.baseViewSet.title",
+      "descKey": "module_template.patterns.items.baseViewSet.desc",
+      "rule": "api_code.mdc",
+      "status": "demoed",
+      "demoRoute": "ModuleTemplateStatus",
+      "demoFile": "api/views.py"
+    },
+    {
       "id": "module-bridge",
       "category": "api",
       "titleKey": "module_template.patterns.items.bridge.title",

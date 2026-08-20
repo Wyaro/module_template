@@ -21,9 +21,9 @@ modules/module_template/
 ├── api/
 │   ├── apps.py                # AppConfig (ready → integrations)
 │   ├── config.py
-│   ├── models.py              # TemplateItem (public_id)
+│   ├── models.py              # TemplateItem (PublicIdMixin)
 │   ├── serializers.py
-│   ├── views.py               # TemplateItemViewSet + HealthViewSet + ML
+│   ├── views.py               # BaseModelViewSet + BaseViewSet + ML
 │   ├── permissions.py
 │   ├── permission_catalog.py
 │   ├── integrations.py        # ModuleBridge: audit, core.user_delete; stub session-scope
@@ -59,6 +59,7 @@ modules/module_template/
 ├── mcp/                       # эталон manifest (без server.py — не регистрируется)
 ├── .cursor/rules/             # правила Cursor модуля (*.mdc)
 ├── AGENTS.md                  # fallback для агента без расширения
+├── task_footprint.yaml        # эталон footprint для ergoms celery-balance
 ├── ergoms.conf
 ├── ergoms.help.yaml
 ├── vscode.tasks.yaml          # задачи Run Task (ergo-module)
@@ -99,7 +100,7 @@ ergoms start-client
 | Status (список TemplateItem) | `SearchInput`, `SelectBox`, `DataTable`, `DropDown`, `LoadingContentArea`, `ModalCenter` + `FormCard`/`FormField`, `confirmDelete` |
 | Patterns | `FilterMenu`, `DecimalInput`, `FormCard`/`FormField`, toast, confirm, реестр `core_patterns.json` |
 | Main (ML) | SVG-марка модуля, toast, `logError`, `useAppI18n` |
-| Lookup API | `public_id`, не pk БД |
+| Lookup API | `BaseModelViewSet` + `public_id`, не pk БД |
 
 ---
 
@@ -134,6 +135,7 @@ ergoms start-client
 5. `ergoms.conf` / MCP name.
 6. `vscode.tasks.yaml` — label/command под новый модуль (если нужны задачи в Run Task).
 7. Меню — миграция `MenuMigrationHelper(apps, 'modules/<name>')`.
+8. `README.md` и `AGENTS.md` — скопировать, заменить имя модуля и домен; оба файла обязательны.
 
 ---
 

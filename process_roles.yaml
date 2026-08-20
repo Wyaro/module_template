@@ -1,0 +1,15 @@
+# Учёт процессов API/worker учебного модуля в ergoms resource-usage.
+module: module_template
+roles:
+  - id: module-api:module_template
+    when:
+      - cmdline_contains_any:
+          - start_module_api.py
+          - --module=module_template
+        project_bound: true
+  - id: module-worker:module_template
+    when:
+      - cmdline_contains_any:
+          - start_celery_worker.py
+          - --module=module_template
+        project_bound: true

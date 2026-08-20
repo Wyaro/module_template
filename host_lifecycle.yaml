@@ -1,0 +1,12 @@
+# OS-службы API и worker учебного модуля (эталон для копирования).
+module: module_template
+host:
+  install_service_commands:
+    - install-module-service --module=module_template --kind=api
+    - install-module-service --module=module_template --kind=worker
+  uninstall_service_commands:
+    - uninstall-module-service --module=module_template --kind=api
+    - uninstall-module-service --module=module_template --kind=worker
+  service_units:
+    - ergo_ms_module_module_template_api
+    - ergo_ms_module_module_template_worker

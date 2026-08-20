@@ -5,7 +5,7 @@
  * LoadingContentArea, ModalCenter, confirm. Состояние списка — useRouteQueryState.
  */
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
-import { Download, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-vue-next'
+import { Download, MoreHorizontal, Pencil, Plus, Trash2 } from '@lucide/vue'
 import DataTable from '@/components/DataTable.vue'
 import DropDown from '@/components/DropDown.vue'
 import LoadingContentArea from '@/components/LoadingContentArea.vue'

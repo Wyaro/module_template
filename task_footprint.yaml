@@ -1,0 +1,13 @@
+module: module_template
+defaults:
+  class: medium
+tasks:
+  - queue: module_template
+    pattern: "modules.module_template.api.tasks.*"
+    class: light
+    ram_mb: 128
+    cpu_units: 0.25
+    gpu_required: false
+    vram_mb: 0
+    max_parallel: 4
+    cpu_fallback: true

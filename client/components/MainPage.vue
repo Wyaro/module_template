@@ -288,7 +288,7 @@ import {
   Activity, Database, Layers, Code,
   BookOpen, GraduationCap,
   BrainCircuit, BarChart2, Lightbulb,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 
 import FormCard from '@/components/FormCard.vue'
 import FormField from '@/components/FormField.vue'

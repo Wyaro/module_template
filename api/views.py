@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
@@ -12,7 +12,8 @@ import time
 
 from src.config.version import get_system_version
 from src.core.audit.mixin import AuditedModelMixin
-from src.core.utils.mixins import MediaApiFileMixin, SwaggerSafeMixin
+from src.core.utils.base.base_viewsets import BaseModelViewSet, BaseViewSet
+from src.core.utils.mixins import MediaApiFileMixin
 
 from .config import MODULE_DATABASE_ALIAS
 from .models import TemplateItem
@@ -41,9 +42,10 @@ def _demo_metrics() -> dict:
     }
 
 
-class TemplateItemViewSet(MediaApiFileMixin, AuditedModelMixin, SwaggerSafeMixin, viewsets.ModelViewSet):
+class TemplateItemViewSet(MediaApiFileMixin, AuditedModelMixin, BaseModelViewSet):
     """CRUD TemplateItem + демо media_api (attachment_path / multipart)."""
 
+    queryset = TemplateItem.objects.all()
     serializer_class = TemplateItemSerializer
     pagination_class = TemplateItemPagination
     parser_classes = [JSONParser, MultiPartParser, FormParser]
@@ -55,24 +57,17 @@ class TemplateItemViewSet(MediaApiFileMixin, AuditedModelMixin, SwaggerSafeMixin
         'destroy': 'module_template.templateitem.deleted',
     }
     permission_classes = [IsAuthenticated, CanViewModuleTemplate]
-    lookup_field = 'public_id'
-    lookup_url_kwarg = 'public_id'
 
     def get_queryset(self):
-        queryset = TemplateItem.objects.all().order_by('name')
-        if self.is_swagger_fake_view():
-            return queryset.none()
-        user = self.get_safe_user()
-        if user is None or not user.is_authenticated:
-            return queryset.none()
+        qs = super().get_queryset().order_by('name')
         active = self.request.query_params.get('active')
         if active is not None:
-            queryset = queryset.filter(active=active.lower() == 'true')
+            qs = qs.filter(active=active.lower() == 'true')
         # Канон search.mdc — параметр q (не legacy search).
         search = (self.request.query_params.get('q') or '').strip()
         if search:
-            queryset = queryset.filter(name__icontains=search)
-        return queryset
+            qs = qs.filter(name__icontains=search)
+        return qs
 
     def _assign_attachment(self, instance) -> None:
         file, file_path = self.get_file_or_path('attachment')
@@ -95,7 +90,7 @@ class TemplateItemViewSet(MediaApiFileMixin, AuditedModelMixin, SwaggerSafeMixin
         self._assign_attachment(instance)
 
 
-class HealthViewSet(viewsets.ViewSet):
+class HealthViewSet(BaseViewSet):
     permission_classes = [IsAuthenticated, CanViewModuleTemplate]
 
     @action(detail=False, methods=['get'], url_path='health')
